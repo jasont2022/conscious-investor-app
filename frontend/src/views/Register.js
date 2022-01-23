@@ -1,9 +1,5 @@
-/* eslint-disable react/jsx-one-expression-per-line */
-/* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable react/jsx-filename-extension */
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import 'bootstrap/dist/css/bootstrap.min.css'
 import { Form, Alert } from 'react-bootstrap'
 import s from 'styled-components'
 // import axios from 'axios'
@@ -37,7 +33,6 @@ const Register = () => {
   const [email, setEmail] = useState('')
   const [firstname, setFirstName] = useState('')
   const [lastname, setLastName] = useState('')
-  const [avatar, setAvatar] = useState('')
   const [errMsg, setErrMsg] = useState('')
 
   const signUp = async e => {
@@ -61,7 +56,7 @@ const Register = () => {
         </Alert>
       )
         : null}
-      <h1 style={{ textAlign: 'center' }}>Sign Up</h1>
+      <h1 style={{ textAlign: 'center' }}>Register</h1>
       <Form style={{ marginTop: '1.5em' }}>
         <Form.Group controlId="formBasicUsername">
           <Form.Label>Username <span style={{ color: 'red' }}>*</span></Form.Label>
@@ -108,14 +103,6 @@ const Register = () => {
             onChange={e => setLastName(e.target.value)}
           />
         </Form.Group>
-        <Form.File
-          style={{ marginTop: '1rem' }}
-          id="custom-file"
-          label="Upload Avater"
-          custom
-          value={avatar}
-          onChange={e => setAvatar(e.target.value)}
-        />
         <p style={{ marginTop: '1rem' }}><span style={{ color: 'red' }}>*</span> Fields are required</p>
         <SubmitButton
           style={{ margin: '1rem 0' }}
