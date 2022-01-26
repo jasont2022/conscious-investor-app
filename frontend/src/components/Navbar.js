@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { Navbar, Nav } from 'react-bootstrap'
 import Button from './Button';
 
+
 const NavBar = ({
   user, setErrMsg, count, setCount,
 }) => {
