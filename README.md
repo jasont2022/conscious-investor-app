@@ -17,7 +17,11 @@ The documents within this collection are structured as follows:
                  cusip: string, 
                  cusip: string, 
                  ... 
-               ]
+               ],
+    preferences: { 
+      array,
+      'default': [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+    }
   }
 ```
 
