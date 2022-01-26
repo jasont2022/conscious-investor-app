@@ -1,9 +1,13 @@
+/** Import packages */
 const express = require('express')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const cookieSession = require('cookie-session')
 const cors = require('cors')
-// const path = require('path') do not remove
+const passport = require('passport')
+const path = require('path')
+
+/** Import Database Credentials */
 const {
   ATLAS_ACCOUNT,
   ATLAS_PASSWORD,
@@ -11,7 +15,12 @@ const {
   ATLAS_CLUSTER_NAME,
 } = require('./secret') // require the credentials for DB connection
 
-/** Import all routers below */
+/** Import the backend routes */
+const AccountRouter = require('./routes/account')
+const ProfileRouter = require('./routes/profile')
+
+/** Import Passport Setup Function */
+const initializePassport = require('./config/passport-setup')
 
 // connect to the database
 const MONGO_URI = `mongodb+srv://${ATLAS_ACCOUNT}:${ATLAS_PASSWORD}@${ATLAS_CLUSTER_NAME}.nxjub.mongodb.net/${ATLAS_DB_NAME}?retryWrites=true&w=majority`
@@ -22,23 +31,33 @@ mongoose.connect(MONGO_URI, {
   console.error(`Connection error to MongoDB Database ${e.message}`)
 })
 
-// make a server and port
+/** Create an Express Server */
 const port = process.env.PORT || 8080
 const app = express()
 
-// app.use(express.static(path.join(__dirname, '../client/build'))) do not remove
+/** Initialize Passort */
+initializePassport(passport)
+
+// connect frontend and backend
+app.use(express.static(path.join(__dirname, '../frontend/build')))
 
 app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
-// app.use(
-//   cookieSession({
-//     name: 'local-session',
-//     keys: ['jfdqqfdfrasqndfsdfpqazf'],
-//     maxAge: 26 * 60 * 60 * 1000, // 24 hours
-//   }),
-// )
+/** Create a Cookie Session for User OAuth */
+app.use(
+  cookieSession({
+    name: 'local-session',
+    keys: ['jfdfdfrzqndfsdfpqqazf'],
+    maxAge: 26 * 60 * 60 * 1000, // 24 hours
+  }),
+)
+
+/** Create Passport OAuth and Session */
+app.use(passport.initialize())
+app.use(passport.session())
+
 
 // test to see if localhost:8080 works
 app.get('/', (_, res, next) => {
@@ -49,17 +68,23 @@ app.get('/', (_, res, next) => {
   }
 })
 
-/** ***** Application routes ***** */
-// app.use('/account', accountRouter)
-// app.use('/profile', profileRouter)
+/** Define all the backend routes */
+app.use('/account', AccountRouter)
+app.use('/profile', ProfileRouter)
 
-// app.get('*', (_req, res) => {
-//   res.sendFile(path.join(__dirname, '../client/build/index.html')) do not remove
-// })
-
-app.use((err, _req, res, next) => {
-  console.log(err.stack)
-  res.status(500).send('Ops something went wrong')
+// connect frontend and backend
+app.get('*', (_req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/build/index.html'))
 })
 
-app.listen(port, () => console.log(`Server running on port ${port}`))
+/** Error handling Route */
+app.use((err, _req, res, _next) => {
+  console.log(err.stack)
+  res.status(500).send(`Ops something went wrong: ${err}`)
+})
+
+/** Listening on Port */
+app.listen(port, err => {
+  if (err) throw err
+  console.log(`Server listening to ${port}`)
+})

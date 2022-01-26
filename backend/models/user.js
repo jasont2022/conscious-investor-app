@@ -5,7 +5,8 @@ const { Schema, model } = mongoose
 
 const user = new Schema({
   // account credentials
-  full_name: { type: String, required: true, maxlength: 100 },
+  firstname: { type: String, required: true },
+  lastname: { type: String, required: true },
   username: {
     type: String,
     required: true,
