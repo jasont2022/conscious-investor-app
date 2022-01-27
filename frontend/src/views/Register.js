@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { Form, Alert } from 'react-bootstrap'
+import { Link, useNavigate } from 'react-router-dom'
+import { Form } from 'react-bootstrap'
 import s from 'styled-components'
-// import axios from 'axios'
+import axios from 'axios'
 
 const FormWrapper = s.div`
   width: 100%;
@@ -28,34 +28,29 @@ const SubmitButton = s.button`
 `
 
 const Register = () => {
+  const navigate = useNavigate();
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [email, setEmail] = useState('')
   const [firstname, setFirstName] = useState('')
   const [lastname, setLastName] = useState('')
-  const [errMsg, setErrMsg] = useState('')
 
+  // function that handles registration logic with backend
   const signUp = async e => {
-    // e.preventDefault()
-    // try {
-    //   const res = await axios.post('/account/signup', {
-    //     username, password, email, firstname, lastname, avatar,
-    //   })
-    //   console.log(res)
-    //   router.push('/login')
-    // } catch (err) {
-    //   setErrMsg(`${err}`)
-    // }
+    e.preventDefault()
+    try {
+      const res = await axios.post('/account/signup', {
+        username, password, email, firstname, lastname
+      })
+      console.log(res)
+      navigate('/login')
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   return (
     <FormWrapper>
-      {errMsg !== '' ? (
-        <Alert variant="danger" onClose={() => setErrMsg('')} dismissible>
-          {errMsg}
-        </Alert>
-      )
-        : null}
       <h1 style={{ textAlign: 'center' }}>Register</h1>
       <Form style={{ marginTop: '1.5em' }}>
         <Form.Group controlId="formBasicUsername">

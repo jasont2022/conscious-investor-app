@@ -1,0 +1,21 @@
+{
+  "name": "conscious-investor-app",
+  "version": "1.0.0",
+  "description": "a full stack web application",
+  "main": "client/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cd backend && node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jasont2022/conscious-investor-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jasont2022/conscious-investor-app/issues"
+  },
+  "homepage": "https://github.com/jasont2022/conscious-investor-app#readme"
+}
