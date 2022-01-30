@@ -9,6 +9,7 @@ const Category = require('../models/category')
 const Company = require('../models/company')
 const Esg = require('../models/esg')
 const Ticker = require('../models/ticker')
+const Comps = require('../models/comps')
 const checkAuthenticated = require('../middlewares/isAuthenticated')
 
 /** Make a router */
@@ -233,5 +234,83 @@ router.get('/financial/:tick', (req, res) => {
 
 })
 
+//get score for company given ticker
+router.get('/total-companies', (req, res) => {
+  Comps.find({}).then(function (comp) {
+    res.send(comp);
+  });
+})
+
+//Your top 10 stocks according to ESG
+router.get('/recommendations/top10', (req, res) => {
+  var total = []
+  var totalDict = {}
+  if (!req.user) {
+    res.send('user not logged in')
+  } else {
+    const { username, firstname, lastname, portfolio, preferences } = req.user
+    const reducer = (accumulator, curr) => accumulator + curr;
+    const total_sum_score = preferences.reduce(reducer)
+    var normalized = []
+    for (var i = 0; i < 18; i++){
+      normalized.push(preferences[i]/total_sum_score)
+    }
+  }
+  Comps.find({}).then(function (comp) {
+    // res.send(comp);
+    comp.forEach((company) => {
+      total.push(company.Symbol)
+    })
+  }).then(function (){
+    total.forEach( function (symb) {
+      var totalScore = 0
+      Ticker.findOne({symbol : symb}).then(function (comp) {
+        if (comp !== null){
+          Esg.findOne({orgid:comp.orgid}).then(function(compp){
+            totalScore += 
+          Number(compp["cg_bd_bf"]) * Number(normalized[0])
+          + Number(compp["cg_bd_bs"]) * Number(normalized[1])
+          + Number(compp["cg_bd_cp"]) * Number(normalized[2])
+          + Number(compp["cg_in_vs"]) * Number(normalized[3])
+          + Number(compp["cg_sh_sr"]) * Number(normalized[4])
+          + Number(compp["ec_ma_pe"]) * Number(normalized[5])
+          + Number(compp["ec_pr_sl"]) * Number(normalized[6])
+          + Number(compp["ec_re_cl"]) * Number(normalized[7])
+          + Number(compp["en_en_er"]) * Number(normalized[8])
+          + Number(compp["en_en_pi"]) * Number(normalized[9])
+          + Number(compp["en_en_rr"]) * Number(normalized[10])
+          + Number(compp["so_cu_pr"]) * Number(normalized[11])
+          + Number(compp["so_so_co"]) * Number(normalized[12])
+          + Number(compp["so_so_hr"]) * Number(normalized[13])
+          + Number(compp["so_wo_do"]) * Number(normalized[14])
+          + Number(compp["so_wo_eq"]) * Number(normalized[15])
+          + Number(compp["so_wo_hs"]) * Number(normalized[16])
+          + Number(compp["so_wo_td"]) * Number(normalized[17])
+          totalDict[symb] = totalScore
+          }).then(function(){
+            if (totalDict['MCY'] > 0){
+              // Create items array
+              var items = Object.keys(totalDict).map(function(key) {
+                return [key, totalDict[key]];
+              });
+
+              // Sort the array based on the second element
+              items.sort(function(first, second) {
+                return second[1] - first[1];
+              });
+
+              try {
+                // Create a new array with only the first 10 items
+                res.send(items.slice(0, 10));
+              } catch (e){
+                console.log(e)
+              } 
+            }
+          })
+        }
+      })
+    })
+  })
+})
 
 module.exports = router
