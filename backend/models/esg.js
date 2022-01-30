@@ -1,0 +1,43 @@
+const mongoose = require('mongoose')
+const { Schema, model } = mongoose
+
+const esg = new Schema({ 
+orgid: Number,
+fisyear:Number,
+cdflag:Number,
+feeddate:String,
+fyenddate:String,
+cg_bd_bf:Number,
+cg_bd_bs:Number,
+cg_bd_cp:Number,
+cg_in_vs:Number,
+cg_sh_sr:Number,
+ec_ma_pe:Number,
+ec_pr_sl:Number,
+ec_re_cl:Number,
+en_en_er:Number,
+en_en_pi:Number,
+en_en_rr:Number,
+so_cu_pr:Number,
+so_so_co:Number,
+so_so_hr:Number,
+so_wo_do:Number,
+so_wo_eq:Number,
+so_wo_hs:Number,
+so_wo_td:Number,
+score:Number,
+cscore:Number,
+controversiesscore:Number,
+resourceusescore:Number,
+emissionsscore:Number,
+innovationscore:Number,
+workforcescore:Number,
+humanrightsscore:Number,
+communityscore:Number,
+productrespscore:Number,
+managementscore:Number,
+shareholdersscore:Number,
+csrstrategyscore:Number}, 
+{ collection : 'esg_score' });
+
+module.exports = model('esg', esg)
