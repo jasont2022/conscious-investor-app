@@ -2,6 +2,7 @@
 const express = require('express')
 const passport = require('passport')
 const bcrypt = require('bcrypt')
+var XMLHttpRequest = require('xhr2');
 
 /** Import User Model and Middleware */
 const User = require('../models/user')
@@ -229,9 +230,28 @@ router.get('/ticker/:tick', (req, res) => {
 })
 
 //get score for company given ticker
-router.get('/financial/:tick', (req, res) => {
+router.get('/financial/regression/:tick', (req, res) => {
   const tick = req.params.tick
+  url = `https://financialmodelingprep.com/api/v3/quote/${tick}?apikey=a4bedca2df6809daa70d74cf9671699f`
 
+  const xhr = new XMLHttpRequest()
+  //open a get request with the remote server URL
+  xhr.open("GET", url)
+  //send the Http request
+  xhr.send()
+
+  //EVENT HANDLERS
+
+  //triggered when the response is completed
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      //parse JSON data
+      data = JSON.parse(xhr.responseText)
+      res.send(data)
+    } else if (xhr.status === 404) {
+      console.log("No records found")
+    }
+  }
 })
 
 //get score for company given ticker
@@ -241,10 +261,12 @@ router.get('/total-companies', (req, res) => {
   });
 })
 
-//Your top 10 stocks according to ESG
-router.get('/recommendations/top10', (req, res) => {
+//Your top 10 stocks according to ESG, with industry filter
+router.get('/recommendations/top10/:industry/:dividend', (req, res) => {
   var total = []
   var totalDict = {}
+  var industry = req.params.industry
+  var dividend = req.params.dividend
   if (!req.user) {
     res.send('user not logged in')
   } else {
@@ -257,9 +279,14 @@ router.get('/recommendations/top10', (req, res) => {
     }
   }
   Comps.find({}).then(function (comp) {
-    // res.send(comp);
     comp.forEach((company) => {
-      total.push(company.Symbol)
+      if (industry === "None"){
+        total.push(company.Symbol)
+      } else {
+        if (company["GICS Sector"] == industry){
+          total.push(company.Symbol)
+        }
+      }
     })
   }).then(function (){
     total.forEach( function (symb) {
@@ -312,5 +339,8 @@ router.get('/recommendations/top10', (req, res) => {
     })
   })
 })
+
+//add industry and top x filter
+
 
 module.exports = router
