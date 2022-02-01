@@ -10,7 +10,7 @@ import Home from './views/Home';
 import Error from './views/Error';
 import Register from './views/Register';
 import Login from './views/Login';
-import Settings from './views/Settings';
+import {SettingComp as Settings} from './views/Settings';
 
 render(
   <Router>

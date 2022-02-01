@@ -134,6 +134,7 @@ router.post('/remove-portfolio/:tick', (req, res) => {
 
 // get preference category names and desciptions
 router.get('/categories', (req, res) => {
+  console.log("Category")
   Category.find({}).then(function (cat) {
     res.send(cat);
   });
