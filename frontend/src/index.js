@@ -10,7 +10,7 @@ import Home from './views/Home';
 import Error from './views/Error';
 import Register from './views/Register';
 import Login from './views/Login';
-
+import Settings from './views/Settings';
 
 render(
   <Router>
@@ -19,6 +19,7 @@ render(
       <Route path='/register' element={<Register />} />
       <Route path='/login' element={<Login />} />
       <Route path='*' element={<Error />} />
+      <Route path='/settings' element={<Settings />} />
     </Routes>
   </Router>,
   document.getElementById('root'),
