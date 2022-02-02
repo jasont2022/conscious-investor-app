@@ -3,8 +3,6 @@ import { render } from 'react-dom';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-
-
 // pages for this product
 import Home from './views/Home';
 import Error from './views/Error';

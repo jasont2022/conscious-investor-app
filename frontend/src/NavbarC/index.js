@@ -1,4 +1,6 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import {
   Nav,
   NavLink,
@@ -8,14 +10,28 @@ import {
   NavBtnLink
 } from './NavbarElements';
 
-const Navbar = () => {
+const Navbar = ({ user, count, setCount }) => {
+  const navigate = useNavigate();
+
+  // function that handles logout logic with backend
+  const logout = async () => {
+    try {
+      const res = await axios.post('/account/logout')
+      console.log(res)
+      setCount(count + 1)
+      navigate('/')
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   return (
     <>
       <Nav>
-      <NavLink to='/'>
+        <NavLink to='/'>
           <img src={require('../avox.png')} alt='logo' />
         </NavLink>
-       
+
         <Bars />
         <NavMenu>
           <NavLink to='/about' activeStyle>
@@ -27,15 +43,27 @@ const Navbar = () => {
           <NavLink to='/contact-us' activeStyle>
             Contact Us
           </NavLink>
-          <NavLink to='/sign-up' activeStyle>
-            Sign Up
-          </NavLink>
+          {user ? (
+            <NavLink to={`/${user}`} activeStyle>
+              {user}
+            </NavLink>
+          ) : (
+            <NavLink to='/register' activeStyle>
+              Register
+            </NavLink>
+          )}
           {/* Second Nav */}
           {/* <NavBtnLink to='/sign-in'>Sign In</NavBtnLink> */}
         </NavMenu>
-        <NavBtn>
-          <NavBtnLink to='/signin'>Sign In</NavBtnLink>
-        </NavBtn>
+        {user ? (
+          <button onClick={() => logout()}>
+            Logout
+          </button>
+        ) : (
+          <NavBtn>
+            <NavBtnLink to='/login'>Login</NavBtnLink>
+          </NavBtn>
+        )}
       </Nav>
     </>
   );
