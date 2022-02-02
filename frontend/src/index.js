@@ -10,6 +10,7 @@ import Home from './views/Home';
 import Error from './views/Error';
 import Register from './views/Register';
 import Login from './views/Login';
+import Search from './views/Search';
 import {SettingComp as Settings} from './views/Settings';
 
 render(
@@ -20,6 +21,7 @@ render(
       <Route path='/login' element={<Login />} />
       <Route path='*' element={<Error />} />
       <Route path='/settings' element={<Settings />} />
+      <Route path='/search' element={<Search />} />
     </Routes>
   </Router>,
   document.getElementById('root'),

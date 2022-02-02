@@ -18,7 +18,11 @@ const Row = {
 }
 
 const Column1 = {
-  flex: "50%"
+  flex: "50%",
+  alignSelf: "center",
+  border: "solid",
+  padding: "20px",
+  margin: "10px"
 }
 
 const Column2 = {
