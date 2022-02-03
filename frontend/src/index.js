@@ -8,7 +8,9 @@ import Home from './views/Home';
 import Error from './views/Error';
 import Register from './views/Register';
 import Login from './views/Login';
-import AboutUs from './views/AboutUs';
+import AboutUs from './views/DashHome';
+import Recommendation from './views/Recommendation';
+import './views/theme.css';
 //import AppLayout from './views/Layout/AppLayout.js';
 
 render(
@@ -18,6 +20,7 @@ render(
       <Route path='/register' element={<Register />} />
       <Route path='/login' element={<Login />} />
       <Route path='/aboutus' element={<AboutUs />} />
+      <Route path='/recommendation' element={<Recommendation />} />
       
       <Route path='*' element={<Error />} />
     </Routes>

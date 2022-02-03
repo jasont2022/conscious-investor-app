@@ -18,7 +18,7 @@ const sidebarNavItems = [
     {
         display: 'Recommendation',
         icon: <i className='bx bx-calendar'></i>,
-        to: '/calendar',
+        to: '/recommendation',
         section: 'calendar'
     },
     {
