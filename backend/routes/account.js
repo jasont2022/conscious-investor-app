@@ -150,14 +150,13 @@ router.get('/categories/:index', (req, res) => {
 
 // adjust user weights
 router.post('/preferences', (req, res) => {
-  const index = Number(req.body.index)
-  const new_level = Number(req.body.new_level)
+  const preferenceList = req.body.preferencesList
+  console.log(preferenceList)
   if (!req.user) {
     res.send('user not logged in')
   } else {
     const { username, firstname, lastname, portfolio, preferences } = req.user
-    preferences[index] = new_level
-    var preferences_new = preferences
+    var preferences_new = preferenceList
     User.findOneAndUpdate(
       { username: username }, 
       { $set: { preferences: preferences_new  } },

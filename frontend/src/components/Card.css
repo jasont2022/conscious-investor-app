@@ -24,3 +24,13 @@
   justify-items: center;
   width: 95%;
 }
+
+a {
+  color: white;
+  text-decoration: none; /* no underline */
+}
+
+a:hover {
+  color: white;
+  text-decoration: none; /* no underline */
+}

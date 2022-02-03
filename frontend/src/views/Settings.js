@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 //import Navbar from '../components/Navbar';
 
 import Navbar from '../NavbarC';
@@ -70,19 +70,16 @@ export class SettingComp extends React.Component {
     event.preventDefault();
   }
 
+
   componentDidMount() {
-    axios.get("http://localhost:8080/account/categories")
-      .then(res => {
-        const category = res.data;
-        console.log(category)
-        this.setState({ category });
+    axios.get("/account/categories")
+    .then(res => {
+      const category = res.data;
+      this.setState({ category });
+      axios.get('/account/user').then(user => {
+        this.setState({preferences: user.data.preferences})
       })
-      // axios.get("http://localhost:8080/account/user")
-      // .then(res => {
-      //   const preferences = res.data.preferences;
-      //   console.log(preferences)
-      //   this.setState({ preferences });
-      // })
+    })
   }
 
   render() {
@@ -91,22 +88,35 @@ export class SettingComp extends React.Component {
       <Navbar />
       <h1 style={Title}>Settings</h1>
       <div style={Row}>
-        <div style={Column1}>
-          <h2 style={{textAlign:"center"}}>Robinhood API Login</h2>
-          <h6 style={{textAlign:"center"}}>Enter your Robinhood login information to update your portfolio with us to reflect your current holdings.</h6>
-          <form onSubmit={this.handleSubmit} style={{paddingLeft:"100px", paddingTop:"20px"}}>
-          <label style={{paddingRight:"50px"}}>
-            Username:
-            <input type="text" value={this.state.username} onChange={this.handleChangeUser} />
-          </label>
-          <label style={{paddingRight:"50px"}}>
-            Password:
-            <input type="text" value={this.state.password} onChange={this.handleChangePass} />
-          </label>
-          <div style={{alignItems:"center", display: "flex", justifyContent: "center", paddingTop:"20px"}}>
-            <input type="submit" value="Submit" style={{display: "block", width:"100px", alignItems:"center"}} />
+        <div>
+          <div style={Column1}>
+            <h2 style={{textAlign:"center"}}>Robinhood API Login</h2>
+            <h6 style={{textAlign:"center"}}>Enter your Robinhood login information to update your portfolio with us to reflect your current holdings.</h6>
+            <form onSubmit={this.handleSubmit} style={{paddingLeft:"100px", paddingTop:"20px"}}>
+            <label style={{paddingRight:"50px"}}>
+              Username:
+              <input type="text" value={this.state.username} onChange={this.handleChangeUser} />
+            </label>
+            <label style={{paddingRight:"50px"}}>
+              Password:
+              <input type="text" value={this.state.password} onChange={this.handleChangePass} />
+            </label>
+            <div style={{alignItems:"center", display: "flex", justifyContent: "center", paddingTop:"20px"}}>
+              <input type="submit" value="Submit" style={{display: "block", width:"100px", alignItems:"center"}} />
+            </div>
+            </form>
           </div>
-          </form>
+          <div style={{paddingLeft:"10px", paddingTop:"30%"}}>
+            <input type="submit" value="DELETE ACCOUNT" onClick = {(e) => { 
+              var result = window.confirm("Want to delete?");
+              if (result) {
+                axios.delete("/account/remove-account").then(res => {
+                  window.location.replace("/");
+                })
+              }
+              }}
+              style={{float:'left', backgroundColor:"#E93B0A"}}/>
+          </div>
         </div>
         <div style={Column2}>
           <h2 style={{textAlign:"center"}}>Preferences</h2>
@@ -114,31 +124,39 @@ export class SettingComp extends React.Component {
           <ul style={{overflowY:"auto", height: "500px"}}>
             {
               this.state.category
-                .map(person =>
+                .map((person, index) =>
                   <div style={{paddingTop:"15px"}}>
                     <li style={{listStyle: "none", display:"contents", fontSize:"35px"}}> {person["Title of Data Point"]}</li>
                     <Popup trigger={<button style={dot}>i</button>} position="right center">
                       <div>{person["Description"].slice(0,-32)}</div>
                     </Popup>
-                    <p>Current Preference : {}</p>
-                    <label style={{paddingRight:"50px"}}>
-                    Change to:
-                    <input type="number" maxlength="1" size="2" max="5" min="1" name="name" style={{width:"40px"}}/>
+                    <label style={{display:"block"}}>
+                    Set New Preference:
+                    <input index={index} onChange={(e)=> {
+                      const preferencesCopy = this.state.preferences.slice()
+                      preferencesCopy[index] = Number(e.target.value)
+                      this.setState({ preferences : preferencesCopy})
+                    }} value={"" + this.state.preferences[index]} type="number" size="2" max="5" min="1" name="name" style={{width:"200px"}}/>
                     </label>
                   </div>
                 )
             }
-            {/* {
-              this.state.preferences
-                .map(pref =>
-                  <div>
-                    <p>{pref}</p>
-                  </div>
-                )
-            } */}
           </ul>
           <div style={{alignItems:"center", display: "flex", justifyContent: "center", paddingTop:"20px"}}>
-            <input type="button" value="Submit Change" style={{display: "block", width:"200px", alignItems:"center"}} />
+            <input onClick={(e)=> {
+              axios.post('/account/preferences', {
+                preferencesList: this.state.preferences
+              })
+              .then(function (response) {
+                alert("Successfully Updated")
+                window.location.reload()
+                console.log(response);
+              })
+              .catch(function (error) {
+                alert("Could Not Update, Try Again")
+                console.log(error);
+              });
+            } } type="button" value="Submit Change" style={{display: "block", width:"200px", alignItems:"center"}} />
           </div>
         </div>
       </div>
