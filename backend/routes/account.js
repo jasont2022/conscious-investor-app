@@ -69,7 +69,7 @@ router.post('/logout', checkAuthenticated, (req, res) => {
 //
 
 // delete account by username
-router.delete('/remove-account', (req, res) => {
+router.delete('/remove-account', checkAuthenticated, (req, res) => {
   if (!req.user) {
     res.send('user not logged in')
   } else {
