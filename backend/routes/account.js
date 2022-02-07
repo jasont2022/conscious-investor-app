@@ -262,11 +262,19 @@ router.get('/total-companies', (req, res) => {
   });
 })
 
-//Your top 10 stocks according to ESG, with industry filter
+//Company Profile
 router.get('/company/profile/:tick', (req, res) => {
   var tick = req.params.tick
-  axios.get(`https://financialmodelingprep.com/api/v3/profile/${tick}?apikey=a4bedca2df6809daa70d74cf9671699f`).then(res => {
-    console.log(res.data)
+  axios.get(`https://financialmodelingprep.com/api/v3/profile/${tick}?apikey=a4bedca2df6809daa70d74cf9671699f`).then(result => {
+    res.send(result.data)
+  })
+})
+
+//News Feed API
+router.get('/company/news/:name', (req, res) => {
+  var name = req.params.name
+  axios.get(`https://newsapi.org/v2/everything?q=${name}&from=2022-01-07&sortBy=popularity&apiKey=45bcdb0400ae42528a19416ef87bef5d`).then(result => {
+    res.send(result.data)
   })
 })
 
@@ -307,6 +315,7 @@ router.get('/recommendations/top10/:industry/:dividend', (req, res) => {
     })
   }).then(function () {
     Ticker.find({symbol : {$in : total}}).then(function(allComps) {
+      console.log(allComps)
       var totalOrgDictionary = {}
       allComps.forEach(function(compJSON) {
         totalOrgDictionary[compJSON["orgid"]] = compJSON["symbol"]
