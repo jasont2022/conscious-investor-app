@@ -265,9 +265,75 @@ router.get('/total-companies', (req, res) => {
 //Company Profile
 router.get('/company/profile/:tick', (req, res) => {
   var tick = req.params.tick
-  axios.get(`https://financialmodelingprep.com/api/v3/profile/${tick}?apikey=a4bedca2df6809daa70d74cf9671699f`).then(result => {
+  axios.get(`https://financialmodelingprep.com/api/v3/profile/${tick}?apikey=e605026ed16aae3b084c6297f09bba6c`).then(result => {
     res.send(result.data)
   })
+})
+
+const findVariance = (arr = []) => {
+  if(!arr.length){
+     return 0;
+  };
+  const sum = arr.reduce((acc, val) => acc + val);
+  const { length: num } = arr;
+  const median = sum / num;
+  let variance = 0;
+  arr.forEach(num => {
+     variance += ((num - median) * (num - median));
+  });
+  variance /= num;
+  return variance;
+};
+
+//Company Financials
+router.get('/company/financials/:tick/:esg', (req, res) => {
+  try {
+    var start = new Date().getTime();
+    for (var i = 0; i < 1e6; i++) {
+      if ((new Date().getTime() - start) > Math.random() * 10000){
+        break;
+      }
+    }
+    var tick = req.params.tick
+    var esg = req.params.esg
+    axios.get(`https://finnhub.io/api/v1/stock/profile2?symbol=${tick}&token=c80soqqad3ie5egte6d0`).then(comp => {
+      var market_value = (comp.data.marketCapitalization)
+  
+      // axios.get(`http://api.marketstack.com/v1/eod?access_key=5a430bce03ab0a9e99d4a5f950304547&symbols=${tick}&limit=1`).then(historical => {
+      //   var totalHist = []
+      //   historical.data.data.forEach(hist => {
+      //     totalHist.push(hist.close)
+      //   })
+      //   var variance = (findVariance(totalHist))
+      axios.get(`http://financialmodelingprep.com/api/v3/ratios-ttm/${tick}?apikey=e605026ed16aae3b084c6297f09bba6c`).then(fin => {
+        try {
+          var priceEarningsRatio = fin.data[0].priceEarningsRatioTTM
+          var priceToBookRatio = fin.data[0].priceToBookRatioTTM
+        } catch (err){
+          console.log(tick)
+        }
+
+        const MV_coef = -1.914
+        const VAR_coef = -0.528
+        const CP_coef = 0.059
+        const BP_coef = -0.018
+        const ESG_coef = -0.747
+
+        var excess_return = Math.abs(MV_coef*market_value
+          + CP_coef*priceEarningsRatio + BP_coef*priceToBookRatio + ESG_coef*Number(esg))
+
+        res.send({
+          tick: tick,
+          market_value: market_value,
+          priceEarningsRatio : priceEarningsRatio,
+          priceToBookRatio : priceToBookRatio,
+          excess_return: excess_return
+        })
+      })
+    })
+  } catch (err){
+    console.log(err)
+  }
 })
 
 //News Feed API
@@ -280,11 +346,12 @@ router.get('/company/news/:name', (req, res) => {
 
 
 //Your top 10 stocks according to ESG, with industry filter
-router.get('/recommendations/top10/:industry/:dividend', (req, res) => {
+router.get('/recommendations/top/:industry/:dividend/:rows', (req, res) => {
   var total = []
   var totalDictPart2 = {}
   var industry = req.params.industry
   var dividend = req.params.dividend
+  var rows = req.params.rows
 
   if (!req.user) {
     res.send('user not logged in')
@@ -315,7 +382,6 @@ router.get('/recommendations/top10/:industry/:dividend', (req, res) => {
     })
   }).then(function () {
     Ticker.find({symbol : {$in : total}}).then(function(allComps) {
-      console.log(allComps)
       var totalOrgDictionary = {}
       allComps.forEach(function(compJSON) {
         totalOrgDictionary[compJSON["orgid"]] = compJSON["symbol"]
@@ -357,7 +423,7 @@ router.get('/recommendations/top10/:industry/:dividend', (req, res) => {
 
         try {
           // Create a new array with only the first 10 items
-          res.send(items.slice(0, 10));
+          res.send(items.slice(0, rows));
         } catch (e){
           console.log(e)
         }
@@ -431,7 +497,32 @@ router.get('/recommendations/model/:industry/:dividend', (req, res) => {
           + Number(singleESG["so_wo_td"]) * Number(normalized[17])
           totalDictPart2[totalOrgDictionary[singleESG["orgid"]]] = totalScore;
         })
-        //GET FINANCIAL INFO LATER
+         // Create items array
+         var items = Object.keys(totalDictPart2).map(function(key) {
+          return [key, totalDictPart2[key]];
+        });
+
+        // Sort the array based on the second element
+        items.sort(function(first, second) {
+          return second[1] - first[1];
+        });
+
+        var totalToReturn = []
+
+        items = items.slice(0, 2)
+
+        items.forEach(company_to_check => {
+          axios.get(`http://localhost:8080/account/company/financials/${company_to_check[0]}/${company_to_check[1]}`).then(financials => {
+            console.log(financials.data)
+            totalToReturn.push({
+              tick : company_to_check[0],
+              esg : company_to_check[1],
+              cumulative_excess : excess_return
+            })
+          })
+        })
+        while (totalToReturn.length != items.length)
+        console.log(totalToReturn)
       })
     })
   })
