@@ -45,7 +45,7 @@ export class Search extends React.Component {
       <div style={{paddingLeft:"45%"}}>
         {this.state.loading ? <TailSpin color="#00BFFF" height={80} width={80} /> : null }
       </div>
-      <CardList companies= {filteredCompanies} portfolio={this.state.portfolio}/>
+      <CardList companies= {filteredCompanies.slice(0,20)} portfolio={this.state.portfolio}/>
     </div> 
     )
   }

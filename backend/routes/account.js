@@ -270,21 +270,6 @@ router.get('/company/profile/:tick', (req, res) => {
   })
 })
 
-const findVariance = (arr = []) => {
-  if(!arr.length){
-     return 0;
-  };
-  const sum = arr.reduce((acc, val) => acc + val);
-  const { length: num } = arr;
-  const median = sum / num;
-  let variance = 0;
-  arr.forEach(num => {
-     variance += ((num - median) * (num - median));
-  });
-  variance /= num;
-  return variance;
-};
-
 //Company Financials
 router.get('/company/financials/:tick/:esg', (req, res) => {
   try {
@@ -298,13 +283,6 @@ router.get('/company/financials/:tick/:esg', (req, res) => {
     var esg = req.params.esg
     axios.get(`https://finnhub.io/api/v1/stock/profile2?symbol=${tick}&token=c80soqqad3ie5egte6d0`).then(comp => {
       var market_value = (comp.data.marketCapitalization)
-  
-      // axios.get(`http://api.marketstack.com/v1/eod?access_key=5a430bce03ab0a9e99d4a5f950304547&symbols=${tick}&limit=1`).then(historical => {
-      //   var totalHist = []
-      //   historical.data.data.forEach(hist => {
-      //     totalHist.push(hist.close)
-      //   })
-      //   var variance = (findVariance(totalHist))
       axios.get(`http://financialmodelingprep.com/api/v3/ratios-ttm/${tick}?apikey=e605026ed16aae3b084c6297f09bba6c`).then(fin => {
         try {
           var priceEarningsRatio = fin.data[0].priceEarningsRatioTTM
@@ -319,15 +297,33 @@ router.get('/company/financials/:tick/:esg', (req, res) => {
         const BP_coef = -0.018
         const ESG_coef = -0.747
 
-        var excess_return = Math.abs(MV_coef*market_value
-          + CP_coef*priceEarningsRatio + BP_coef*priceToBookRatio + ESG_coef*Number(esg))
+        axios.get(`https://financialmodelingprep.com/api/v3/historical-price-full/${tick}?apikey=e605026ed16aae3b084c6297f09bba6c&timeseries=10`).then(allHist => {
+          arr = []
+          allHist.data.historical.forEach(single => {
+            arr.push(single.close)
+          })
+      
+          const sum = arr.reduce((acc, val) => acc + val);
+          const { length: num } = arr;
+          const median = sum / num;
+          let variance = 0;
+          arr.forEach(num => {
+              variance += ((num - median) * (num - median));
+          });
+          variance /= num;
 
-        res.send({
-          tick: tick,
-          market_value: market_value,
-          priceEarningsRatio : priceEarningsRatio,
-          priceToBookRatio : priceToBookRatio,
-          excess_return: excess_return
+
+          var excess_return = Math.abs(MV_coef*market_value
+            + CP_coef*priceEarningsRatio + VAR_coef*variance + BP_coef*priceToBookRatio + ESG_coef*Number(esg))
+
+          res.send({
+            tick: tick,
+            market_value: market_value,
+            variance: variance,
+            priceEarningsRatio : priceEarningsRatio,
+            priceToBookRatio : priceToBookRatio,
+            excess_return: excess_return
+          })
         })
       })
     })
