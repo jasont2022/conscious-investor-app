@@ -29,7 +29,7 @@ const Navbar = ({ user, count, setCount }) => {
     <>
       <Nav>
         <NavLink to='/'>
-          <img src={require('../avox.png')} alt='logo' />
+          
         </NavLink>
 
         <Bars />

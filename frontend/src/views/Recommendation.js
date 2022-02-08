@@ -1,17 +1,56 @@
-import React from 'react';
-import Navbar from '../NavbarC';
+import React from 'react'
 
-// add more props to Navbar see Navbar.js
-export class Recommendation extends React.Component {
+import Table from '../components/Table/Table';
 
-  render() {
+import customerList from './customers-list.json'
+
+const customerTableHead = [
+    '',
+    'name',
+    'email',
+    'phone',
+    'total orders',
+    'total spend',
+    'location'
+]
+
+const renderHead = (item, index) => <th key={index}>{item}</th>
+
+const renderBody = (item, index) => (
+    <tr key={index}>
+        <td>{item.id}</td>
+        <td>{item.name}</td>
+        <td>{item.email}</td>
+        <td>{item.phone}</td>
+        <td>{item.total_orders}</td>
+        <td>{item.total_spend}</td>
+        <td>{item.location}</td>
+    </tr>
+)
+
+const Recommendation = () => {
     return (
-    <div>
-      <Navbar />
-      <h1>Recommendation</h1>
-    </div> 
+        <div>
+            <h2 className="page-header">
+                customers
+            </h2>
+            <div className="row">
+                <div className="col-12">
+                    <div className="card">
+                        <div className="card__body">
+                            <Table
+                                limit='10'
+                                headData={customerTableHead}
+                                renderHead={(item, index) => renderHead(item, index)}
+                                bodyData={customerList}
+                                renderBody={(item, index) => renderBody(item, index)}
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     )
-  }
 }
 
-export default Recommendation;
+export default Recommendation
