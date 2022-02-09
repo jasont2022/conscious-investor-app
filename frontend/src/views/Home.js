@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
-//import Navbar from '../components/Navbar';
 import Navbar from '../NavbarC';
+import { Outlet } from "react-router-dom";
+import Sidebar from '../components/Sidebar/Sidebar';
+import 'boxicons/css/boxicons.min.css';
+
 
 // add more props to Navbar see Navbar.js
 const Home = () => {
@@ -28,12 +31,17 @@ const Home = () => {
 
   return (
     <div>
+      <style>{'body { background-color: lightgray; padding: 0px 0px 0px 320px }'}</style>
       <Navbar
         user={activeUser}
         count={count}
         setCount={setCount}
       />
-      {activeUser ? (<h1>Hello {activeUser} </h1>) : (<h1>Not logged In</h1>)}
+
+      <Sidebar />
+      <Outlet />
+      
+      {activeUser ? (<h1>Hello {activeUser} </h1> ): (<h1>Not logged In</h1>)}
     </div>
   );
 };
