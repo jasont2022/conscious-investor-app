@@ -5,6 +5,7 @@ import Navbar from '../NavbarC';
 import axios from 'axios'
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
+import Button from '@mui/material/Button';
 
 const Title = {
   width: "300px",
@@ -19,14 +20,17 @@ const Row = {
 
 const Column1 = {
   flex: "50%",
+  maxWidth: "50%",
+  minWidth: "50%",
   alignSelf: "center",
-  border: "solid",
   padding: "20px",
-  margin: "10px"
+  margin: "10px",
+  display: 'content'
 }
 
 const Column2 = {
-  flex: "50%"
+  flex: "50%",
+  minWidth: "50%"
 }
 
 const dot = {
@@ -86,42 +90,34 @@ export class SettingComp extends React.Component {
     return (
     <div>
       <Navbar />
-      <h1 style={Title}>Settings</h1>
+      <div style={{height:40}}></div>
+      <h1 style={{textAlign:"center"}}>Settings</h1>
+      <div style={{height:30}}></div>
       <div style={Row}>
-        <div>
+        <div style={{textAlign: '-webkit-center',height:""}}>
           <div style={Column1}>
-            <h2 style={{textAlign:"center"}}>Robinhood API Login</h2>
-            <h6 style={{textAlign:"center"}}>Enter your Robinhood login information to update your portfolio with us to reflect your current holdings.</h6>
+            <h2 style={{textAlign:"center"}}>How to use Preferences</h2>
+            <p style={{textAlign:"center"}}>Adjust your commitment to certain ESG categories here. As you change the scale for a category, our
+            algorithm continues to personalize your portfolio scores, as well as your recommendations, to match your beliefs. We scale each
+            preference from 1 being apathetic, and 5 for compassionate. After making adjustments, select "Submit Change". Thank you!</p>
             <form onSubmit={this.handleSubmit} style={{paddingLeft:"100px", paddingTop:"20px"}}>
-            <label style={{paddingRight:"50px"}}>
-              Username:
-              <input type="text" value={this.state.username} onChange={this.handleChangeUser} />
-            </label>
-            <label style={{paddingRight:"50px"}}>
-              Password:
-              <input type="text" value={this.state.password} onChange={this.handleChangePass} />
-            </label>
-            <div style={{alignItems:"center", display: "flex", justifyContent: "center", paddingTop:"20px"}}>
-              <input type="submit" value="Submit" style={{display: "block", width:"100px", alignItems:"center"}} />
-            </div>
             </form>
           </div>
           <div style={{paddingLeft:"10px", paddingTop:"30%"}}>
-            <input type="submit" value="DELETE ACCOUNT" onClick = {(e) => { 
+          <Button variant="outlined" color="error" onClick = {(e) => { 
               var result = window.confirm("Want to delete?");
               if (result) {
                 axios.delete("/account/remove-account").then(res => {
                   window.location.replace("/");
                 })
               }
-              }}
-              style={{float:'left', backgroundColor:"#E93B0A"}}/>
+              }}>
+            DELETE ACCOUNT
+          </Button>
           </div>
         </div>
         <div style={Column2}>
-          <h2 style={{textAlign:"center"}}>Preferences</h2>
-          <h6 style={{textAlign:"center"}}>From a scale of 1 (low preference) to 5 (high preference) - Scroll to see all 18 Preferences</h6>
-          <ul style={{overflowY:"auto", height: "500px"}}>
+          <ul style={{overflowY:"auto", height: "26%"}}>
             {
               this.state.category
                 .map((person, index) =>
@@ -143,7 +139,7 @@ export class SettingComp extends React.Component {
             }
           </ul>
           <div style={{alignItems:"center", display: "flex", justifyContent: "center", paddingTop:"20px"}}>
-            <input onClick={(e)=> {
+            <Button color="secondary" onClick={(e)=> {
               axios.post('/account/preferences', {
                 preferencesList: this.state.preferences
               })
@@ -156,7 +152,7 @@ export class SettingComp extends React.Component {
                 alert("Could Not Update, Try Again")
                 console.log(error);
               });
-            } } type="button" value="Submit Change" style={{display: "block", width:"200px", alignItems:"center"}} />
+            } } color="primary" variant="contained" value="Submit Change">Submit Change</Button>
           </div>
         </div>
       </div>
