@@ -91,7 +91,7 @@ export class SettingComp extends React.Component {
   render() {
     return (
     <div>
-          <style>{'body { padding: 0px 0px 0px 320px }'}</style>
+      <style>{'body {background-color: white; padding: 0px 0px 0px 323px }'}</style>
       <Sidebar/>
       <Navbar />
       <div style={{height:40}}></div>

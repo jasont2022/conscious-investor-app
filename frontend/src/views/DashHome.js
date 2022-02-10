@@ -179,7 +179,7 @@ export default class Dashboard extends React.Component {
   render(){
   return (
     <div>
-      <style>{'body { padding: 0px 0px 0px 320px }'}</style>
+      <style>{'body {background-color: white; padding: 0px 0px 0px 323px }'}</style>
       <Navbar/>
       <Sidebar/>
       <Container maxWidth={false} sx={{ backgroundColor: '#EFE5FF'}}>
