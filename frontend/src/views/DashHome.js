@@ -54,7 +54,7 @@ const renderOrderBody = (item, index) => (
 
 // add more props to Navbar see Navbar.js
 const Dashbaord = () => {
-  const navigate = useNavigate;
+  const navigate = useNavigate();
   const [activeUser, setActiveUser] = useState('')
   const [count, setCount] = useState(0) // to trigger the useEffect
 

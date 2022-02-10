@@ -180,11 +180,14 @@ router.get('/company', (req, res) => {
 })
 
 //get score for company given ticker
-router.get('/esg/:tick', (req, res) => {
-  const tick = req.params.tick
-  Company.findOne({tick : tick}).then(function (comp) {
-    res.send(comp);
-  });
+router.get('/esg/:tick', async (req, res) => {
+  const { params: { tick } } = req
+  try {
+    const data = await Company.findOne({ tick: tick})
+    res.send(data)
+  } catch (err) {
+    next(err)
+  }
 })
 
 //get score for company given ticker

@@ -95,10 +95,10 @@ export default class Recommendation extends React.Component {
     super(props);
     this.state = {
       industry: 'Information Technology',
-      state:'',
-      dividend:false,
-      model:'esg',
-      rows : 5,
+      state: '',
+      dividend: false,
+      model: 'esg',
+      rows: 5,
       full_recs: []
     }
 
@@ -110,28 +110,28 @@ export default class Recommendation extends React.Component {
   }
 
   handleChangeIndustry(event) {
-    this.setState({industry: event.target.value});
+    this.setState({ industry: event.target.value });
     event.preventDefault();
   }
 
   handleChangeRows(event) {
-    this.setState({rows: event.target.value});
+    this.setState({ rows: event.target.value });
     event.preventDefault();
   }
 
   handleChangeDividend(event) {
-    this.setState({dividend: event.target.value});
+    this.setState({ dividend: event.target.value });
     event.preventDefault();
   }
 
   handleChangeModel(event) {
-    this.setState({model: event.target.value});
+    this.setState({ model: event.target.value });
     event.preventDefault();
   }
 
   handleApplyChanges(event) {
-    this.setState({ full_recs : []})
-    if (this.state.model === 'esg'){
+    this.setState({ full_recs: [] })
+    if (this.state.model === 'esg') {
       axios.get(`/account/recommendations/top/${this.state.industry}/${this.state.dividend}/${this.state.rows}`).then(res => {
         var total = res.data
         total.forEach(element => {
@@ -143,10 +143,10 @@ export default class Recommendation extends React.Component {
               companyName: comp.data.name,
               industry: comp.data.finnhubIndustry,
               marketCap: comp.data.marketCapitalization,
-              esg: Math.floor(Number(element[1] * 1000))/10
+              esg: Math.floor(Number(element[1] * 1000)) / 10
             }
             recsCopy.push(single)
-            this.setState({ full_recs : recsCopy})
+            this.setState({ full_recs: recsCopy })
           })
         });
       })
@@ -164,10 +164,10 @@ export default class Recommendation extends React.Component {
                 industry: comp.data.finnhubIndustry,
                 marketCap: comp.data.marketCapitalization,
                 excess_return: Math.floor(Number(fin.data.excess_return)),
-                esg: Math.floor(Number(element[1] * 1000))/10
+                esg: Math.floor(Number(element[1] * 1000)) / 10
               }
               recsCopy.push(single)
-              this.setState({ full_recs : recsCopy})
+              this.setState({ full_recs: recsCopy })
             })
           })
         })
@@ -176,76 +176,75 @@ export default class Recommendation extends React.Component {
     event.preventDefault();
   }
 
-  render(){
-  return (
-    <div>
-      <Container maxWidth={false} sx={{ backgroundColor: '#EFE5FF'}}>
-        <Box sx={{ fontWeight: 'bold', fontSize: 40, textAlignLast: 'center'}}>Recommendation</Box>
-        <Box sx={{ fontWeight: 'bold', height: 10 }}></Box>
-      </Container>
-      <FormGroup className="MuiFormGroup-options" row sx={{display:"block", textAlignLast:'center'}}>
-      <FormControl variant="standard" sx={{width:150, margin:5}}>
-      <InputLabel>Industry</InputLabel>
-      <Select value={this.state.industry} onChange={this.handleChangeIndustry}>
-        <MenuItem value="Information Technology">Information Technology</MenuItem>
-        <MenuItem value="Financials">Financials</MenuItem>
-        <MenuItem value="Health Care">Health Care</MenuItem>
-        <MenuItem value="Utilities">Utilities</MenuItem>
-        <MenuItem value="Consumer Discretionary">Consumer Discretionary</MenuItem>
-        <MenuItem value="Materials">Materials</MenuItem>
-        <MenuItem value="Industrials">Industrials</MenuItem>
-        <MenuItem value="Real Estate">Real Estate</MenuItem>
-        <MenuItem value="Communication Services">Communication Services</MenuItem>
-        <MenuItem value="Consumer Staples">Consumer Staples</MenuItem>
-        <MenuItem value="Energy">Energy</MenuItem>
-        <MenuItem value="None">None</MenuItem>
-      </Select>
-      </FormControl>
-      <FormControl variant="standard" sx={{width:150, margin:5}}>
-        <InputLabel>Number of Companies</InputLabel>
-        <Select value={this.state.rows} onChange={this.handleChangeRows}>
-          <MenuItem value={5}>5</MenuItem>
-          <MenuItem value={10}>{Number(10).toLocaleString()}</MenuItem>
-          <MenuItem value={20}>{Number(20).toLocaleString()}</MenuItem>
-        </Select>
-      </FormControl>
-      <FormControl variant="standard" sx={{width:150, margin:5}}>
-        <InputLabel>Dividend</InputLabel>
-        <Select value={this.state.dividend} onChange={this.handleChangeDividend}>
-          <MenuItem value={true}>Greater Than 0</MenuItem>
-          <MenuItem value={false}>No Preference</MenuItem>
-        </Select>
-      </FormControl>
-      <FormControl variant="standard" sx={{width:150, margin:5}}>
-        <InputLabel>Model Type</InputLabel>
-        <Select value={this.state.model} onChange={this.handleChangeModel}>
-          <MenuItem value="esg">ESG</MenuItem>
-          <MenuItem value="financial">Financial</MenuItem>
-        </Select>
-      </FormControl>
-      <Button
-        size="small"
-        variant="outlined"
-        color="primary"
-        sx={{width:100, margin:5}}
-        onClick={this.handleApplyChanges}
-      >
-        Apply
-      </Button>
-      </FormGroup>
+  render() {
+    return (
+      <div>
+        <Container maxWidth={false} sx={{ backgroundColor: '#EFE5FF' }}>
+          <Box sx={{ fontWeight: 'bold', fontSize: 40, textAlignLast: 'center' }}>Recommendation</Box>
+          <Box sx={{ fontWeight: 'bold', height: 10 }}></Box>
+        </Container>
+        <FormGroup className="MuiFormGroup-options" row sx={{ display: "block", textAlignLast: 'center' }}>
+          <FormControl variant="standard" sx={{ width: 150, margin: 5 }}>
+            <InputLabel>Industry</InputLabel>
+            <Select value={this.state.industry} onChange={this.handleChangeIndustry}>
+              <MenuItem value="Information Technology">Information Technology</MenuItem>
+              <MenuItem value="Financials">Financials</MenuItem>
+              <MenuItem value="Health Care">Health Care</MenuItem>
+              <MenuItem value="Utilities">Utilities</MenuItem>
+              <MenuItem value="Consumer Discretionary">Consumer Discretionary</MenuItem>
+              <MenuItem value="Materials">Materials</MenuItem>
+              <MenuItem value="Industrials">Industrials</MenuItem>
+              <MenuItem value="Real Estate">Real Estate</MenuItem>
+              <MenuItem value="Communication Services">Communication Services</MenuItem>
+              <MenuItem value="Consumer Staples">Consumer Staples</MenuItem>
+              <MenuItem value="Energy">Energy</MenuItem>
+              <MenuItem value="None">None</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl variant="standard" sx={{ width: 150, margin: 5 }}>
+            <InputLabel>Number of Companies</InputLabel>
+            <Select value={this.state.rows} onChange={this.handleChangeRows}>
+              <MenuItem value={5}>5</MenuItem>
+              <MenuItem value={10}>{Number(10).toLocaleString()}</MenuItem>
+              <MenuItem value={20}>{Number(20).toLocaleString()}</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl variant="standard" sx={{ width: 150, margin: 5 }}>
+            <InputLabel>Dividend</InputLabel>
+            <Select value={this.state.dividend} onChange={this.handleChangeDividend}>
+              <MenuItem value={true}>Greater Than 0</MenuItem>
+              <MenuItem value={false}>No Preference</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl variant="standard" sx={{ width: 150, margin: 5 }}>
+            <InputLabel>Model Type</InputLabel>
+            <Select value={this.state.model} onChange={this.handleChangeModel}>
+              <MenuItem value="esg">ESG</MenuItem>
+              <MenuItem value="financial">Financial</MenuItem>
+            </Select>
+          </FormControl>
+          <Button
+            size="small"
+            variant="outlined"
+            color="primary"
+            sx={{ width: 100, margin: 5 }}
+            onClick={this.handleApplyChanges}
+          >
+            Apply
+          </Button>
+        </FormGroup>
 
-      <div style={{ height: 600, width: '70%', margin: 'auto'}}>
-      <DataGrid
-        rows={this.state.full_recs.sort((a, b) => parseFloat(b.excess_return) - parseFloat(a.excess_return)).slice(0, this.state.rows)}
-        columns={this.state.model === 'esg' ? columns : financial_columns}
-        pageSize={10}
-        rowsPerPageOptions={[10]}
-        checkboxSelection
-        disableSelectionOnClick
-      />
-    </div>
-
-    </div>
-  );
+        <div style={{ height: 600, width: '70%', margin: 'auto' }}>
+          <DataGrid
+            rows={this.state.full_recs.sort((a, b) => parseFloat(b.excess_return) - parseFloat(a.excess_return)).slice(0, this.state.rows)}
+            columns={this.state.model === 'esg' ? columns : financial_columns}
+            pageSize={10}
+            rowsPerPageOptions={[10]}
+            checkboxSelection
+            disableSelectionOnClick
+          />
+        </div>
+      </div>
+    );
   }
 }

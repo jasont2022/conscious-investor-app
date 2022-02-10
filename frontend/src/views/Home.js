@@ -9,7 +9,7 @@ import 'boxicons/css/boxicons.min.css';
 
 // add more props to Navbar see Navbar.js
 const Home = () => {
-  const navigate = useNavigate;
+  const navigate = useNavigate();
   const [activeUser, setActiveUser] = useState('')
   const [count, setCount] = useState(0) // to trigger the useEffect
 
