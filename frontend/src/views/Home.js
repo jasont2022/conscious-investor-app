@@ -40,8 +40,8 @@ const Home = () => {
 
       <Sidebar />
       <Outlet />
-      
-      {activeUser ? (<h1>Hello {activeUser} </h1> ): (<h1>Not logged In</h1>)}
+
+      {activeUser ? (<h1>Hello {activeUser} </h1>) : (<h1>Not logged In</h1>)}
     </div>
   );
 };

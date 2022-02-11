@@ -183,7 +183,8 @@ router.get('/company', (req, res) => {
 router.get('/esg/:tick', async (req, res) => {
   const { params: { tick } } = req
   try {
-    const data = await Company.findOne({ tick: tick})
+    const { orgid } = await Company.findOne({ tick: tick})
+    const data = await Esg.findOne({ orgid: orgid })
     res.send(data)
   } catch (err) {
     next(err)
@@ -227,7 +228,10 @@ router.get('/ticker/:tick', (req, res) => {
         + Number(compp["so_wo_hs"]) * Number(normalized[16])
         + Number(compp["so_wo_td"]) * Number(normalized[17])
         console.log(totalScore)
-        res.send('Personal score for ' + tick + " is " + totalScore);
+        res.json({
+          tick, 
+          score: totalScore
+        });
       })
     });
   }
@@ -338,7 +342,7 @@ router.get('/company/financials/:tick/:esg', (req, res) => {
 //News Feed API
 router.get('/company/news/:name', (req, res) => {
   var name = req.params.name
-  axios.get(`https://newsapi.org/v2/everything?q=${name}&from=2022-01-07&sortBy=popularity&apiKey=45bcdb0400ae42528a19416ef87bef5d`).then(result => {
+  axios.get(`https://newsapi.org/v2/everything?q=${name}&from=2022-02-01&sortBy=popularity&apiKey=45bcdb0400ae42528a19416ef87bef5d`).then(result => {
     res.send(result.data)
   })
 })
