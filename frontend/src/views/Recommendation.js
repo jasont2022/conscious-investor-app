@@ -95,7 +95,7 @@ export default class Recommendation extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      industry: 'Financials',
+      industry: 'Information Technology',
       state:'',
       dividend:false,
       model:'esg',

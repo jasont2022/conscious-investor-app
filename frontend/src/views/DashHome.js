@@ -132,47 +132,27 @@ export default class Dashboard extends React.Component {
   handleApplyChanges(event) {
     this.setState({ full_recs : []})
     if (this.state.model === 'esg'){
-      axios.get(`/account/recommendations/top/${this.state.industry}/${this.state.dividend}/${this.state.rows}`).then(res => {
+      axios.get(`/account/portfolio/`).then(res => {
         var total = res.data
-        total.forEach(element => {
-          axios.get(`https://finnhub.io/api/v1/stock/profile2?symbol=${element[0]}&token=c80soqqad3ie5egte6d0`).then(comp => {
+        
+        total.forEach(total => {
+          
+          axios.get(`https://finnhub.io/api/v1/stock/profile2?symbol=${total}&token=c80soqqad3ie5egte6d0`).then(comp => {
             var recsCopy = this.state.full_recs.slice()
             var single = {
-              id: element[0],
+              id: total[0],
               logo: comp.data.logo,
               companyName: comp.data.name,
               industry: comp.data.finnhubIndustry,
               marketCap: comp.data.marketCapitalization,
-              esg: Math.floor(Number(element[1] * 1000))/10
+              esg: Math.floor(Number(total[1] * 1000))/10
             }
             recsCopy.push(single)
             this.setState({ full_recs : recsCopy})
           })
         });
       })
-    } else {
-      axios.get(`/account/recommendations/top/${this.state.industry}/${this.state.dividend}/30`).then(res => {
-        var total = res.data
-        total.forEach(element => {
-          axios.get(`https://finnhub.io/api/v1/stock/profile2?symbol=${element[0]}&token=c8112kaad3ie5egtg9ug`).then(comp => {
-            axios.get(`/account/company/financials/${element[0]}/${element[1]}`).then(fin => {
-              var recsCopy = this.state.full_recs.slice()
-              var single = {
-                id: element[0],
-                logo: comp.data.logo,
-                companyName: comp.data.name,
-                industry: comp.data.finnhubIndustry,
-                marketCap: comp.data.marketCapitalization,
-                excess_return: Math.floor(Number(fin.data.excess_return)),
-                esg: Math.floor(Number(element[1] * 1000))/10
-              }
-              recsCopy.push(single)
-              this.setState({ full_recs : recsCopy})
-            })
-          })
-        })
-      })
-    }
+    } 
     event.preventDefault();
   }
 
@@ -197,7 +177,7 @@ export default class Dashboard extends React.Component {
         sx={{width:100, margin:5}}
         onClick={this.handleApplyChanges}
       >
-        Apply
+        Refresh
       </Button>
       </FormGroup>
 

@@ -12,7 +12,8 @@ const Company = require('../models/company')
 const Esg = require('../models/esg')
 const Ticker = require('../models/ticker')
 const Comps = require('../models/comps')
-const checkAuthenticated = require('../middlewares/isAuthenticated')
+const checkAuthenticated = require('../middlewares/isAuthenticated');
+const { deserializeUser } = require('passport');
 
 /** Make a router */
 const router = express.Router()
@@ -107,6 +108,7 @@ router.post('/add-portfolio/:tick', (req, res) => {
   }
 })
 
+
 // remove stock from portfolio using ticker
 router.post('/remove-portfolio/:tick', (req, res) => {
   if (!req.user) {
@@ -133,9 +135,27 @@ router.post('/remove-portfolio/:tick', (req, res) => {
   }
 })
 
+// get portfolio information
+
+router.get('/portfolio', (req, res) => {
+
+  if (!req.user) {
+    res.send('user not logged in')
+  } else {
+    const { username, firstname, lastname, portfolio } = req.user
+  console.log("Portfolio Info")
+  console.log(portfolio)
+  res.send(portfolio);
+  }
+  });
+
+
+
+
 // get preference category names and desciptions
 router.get('/categories', (req, res) => {
   console.log("Category")
+  console.log("It is printt")
   Category.find({}).then(function (cat) {
     res.send(cat);
   });
