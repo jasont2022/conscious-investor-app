@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import s from 'styled-components';
 import Navbar from '../NavbarC';
 
 const Company = () => {
-  const navigate = useNavigate();
-  const { tick } = useParams();
+  const navigate = useNavigate()
+  const { tick } = useParams()
 
   // states to keep track of
-  const [activeUser, setActiveUser] = useState('')
+  const [activeUser, setActiveUser] = useState('') // keep track of user
   const [count, setCount] = useState(0) // to trigger the useEffect
   const [basicInfo, setBasicInfo] = useState({}) // get company info
   const [esgInfo, setEsgInfo] = useState({}) // get esg info 
@@ -37,7 +36,7 @@ const Company = () => {
         const { data } = await axios.get(`https://financialmodelingprep.com/api/v3/profile/${tick}?apikey=e605026ed16aae3b084c6297f09bba6c`)
         const { data: esg } = await axios.get(`/account/esg/${tick}`)
         const { data: { score }} = await axios.get(`/account/ticker/${tick}`)
-        const { data: { articles }} = await axios.get(`/account/company/news/${tick}`)
+        const { data: { articles }} = await axios.get(`/account/company/news/${data[0].companyName}`)
         console.log(data[0])
         setBasicInfo(data[0])
         console.log(esg)
@@ -99,8 +98,7 @@ const Company = () => {
 }
 
 const News = ({ article }) => {
-  const navigate = useNavigate();
-  const { author, description, publishedAt, title, url, urlToImage } = article  || {}
+  const { author, description, publishedAt, title, url, urlToImage } = article || {}
   return (
     <div style={{ margin: '50px' }}>
       <h1>{title}</h1>
