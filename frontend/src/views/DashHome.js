@@ -34,15 +34,10 @@ const columns = [
   {
     field: 'industry',
     headerName: 'Industry',
-    width: 200,
+    width: 150,
     editable: true,
   },
-  {
-    field: 'marketCap',
-    headerName: 'Market Cap (millions)',
-    width: 200,
-    editable: true,
-  },
+
   {
     field: 'esg',
     headerName: 'ESG',
@@ -103,26 +98,18 @@ export default class Dashboard extends React.Component {
       full_recs: []
     }
 
-    this.handleChangeIndustry = this.handleChangeIndustry.bind(this);
     this.handleChangeRows = this.handleChangeRows.bind(this);
-    this.handleChangeModel = this.handleChangeModel.bind(this);
     this.handleApplyChanges = this.handleApplyChanges.bind(this);
   }
 
-  handleChangeIndustry(event) {
-    this.setState({industry: event.target.value});
-    event.preventDefault();
-  }
+ 
 
   handleChangeRows(event) {
     this.setState({rows: event.target.value});
     event.preventDefault();
   }
 
-  handleChangeDividend(event) {
-    this.setState({dividend: event.target.value});
-    event.preventDefault();
-  }
+ 
 
   handleChangeModel(event) {
     this.setState({model: event.target.value});
@@ -138,17 +125,21 @@ export default class Dashboard extends React.Component {
         total.forEach(total => {
           
           axios.get(`https://finnhub.io/api/v1/stock/profile2?symbol=${total}&token=c80soqqad3ie5egte6d0`).then(comp => {
-            var recsCopy = this.state.full_recs.slice()
-            var single = {
-              id: total[0],
-              logo: comp.data.logo,
-              companyName: comp.data.name,
-              industry: comp.data.finnhubIndustry,
-              marketCap: comp.data.marketCapitalization,
-              esg: Math.floor(Number(total[1] * 1000))/10
-            }
-            recsCopy.push(single)
-            this.setState({ full_recs : recsCopy})
+            axios.get(`/account/ticker/${total}`).then(scr => {
+              var score = scr
+              var thenum = score.data.replace( /^\D+/g, '');
+              var recsCopy = this.state.full_recs.slice()
+              var single = {
+                id: total[0],
+                logo: comp.data.logo,
+                companyName: comp.data.name,
+                industry: comp.data.finnhubIndustry,
+                esg: Math.floor(Number(thenum * 1000))/10
+
+              }
+              recsCopy.push(single)
+              this.setState({ full_recs : recsCopy})
+            })
           })
         });
       })

@@ -166,6 +166,7 @@ export default class Recommendation extends React.Component {
                 marketCap: comp.data.marketCapitalization,
                 excess_return: Math.floor(Number(fin.data.excess_return)),
                 esg: Math.floor(Number(element[1] * 1000))/10
+
               }
               recsCopy.push(single)
               this.setState({ full_recs : recsCopy})
