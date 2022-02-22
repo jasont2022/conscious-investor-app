@@ -4,13 +4,13 @@ import './Sidebar.scss';
 
 const sidebarNavItems = [
     {
-        display: 'Dashboard',
+        display: 'Home',
         icon: <i className='bx bx-home'></i>,
         to: '/',
         section: ''
     },
     {
-        display: 'About Us',
+        display: 'Dashboard',
         icon: <i className='bx bx-star'></i>,
         to: '/aboutus',
         section: 'started'
@@ -30,7 +30,7 @@ const sidebarNavItems = [
     {
         display: 'Settings',
         icon: <i className='bx bx-receipt'></i>,
-        to: '/order',
+        to: '/settings',
         section: 'order'
     },
 ]
@@ -39,13 +39,13 @@ const Sidebar = () => {
     const [activeIndex, setActiveIndex] = useState(0);
     const [stepHeight, setStepHeight] = useState(0);
     const sidebarRef = useRef();
-    const indicatorRef = useRef();
+    //const indicatorRef = useRef();
     const location = useLocation();
 
     useEffect(() => {
         setTimeout(() => {
             const sidebarItem = sidebarRef.current.querySelector('.sidebar__menu__item');
-            indicatorRef.current.style.height = `${sidebarItem.clientHeight}px`;
+            //indicatorRef.current.style.height = `${sidebarItem.clientHeight}px`;
             setStepHeight(sidebarItem.clientHeight);
         }, 50);
     }, []);
@@ -63,7 +63,7 @@ const Sidebar = () => {
         </div>
         <div ref={sidebarRef} className="sidebar__menu">
             <div
-                ref={indicatorRef}
+               // ref={indicatorRef}
                 className="sidebar__menu__indicator"
                 style={{
                     transform: `translateX(-50%) translateY(${activeIndex * stepHeight}px)`

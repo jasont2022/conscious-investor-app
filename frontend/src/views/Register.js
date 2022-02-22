@@ -107,6 +107,8 @@ const Register = () => {
         >
           Sign Up
         </SubmitButton>
+
+        
         <p style={{ textAlign: 'center' }}>
           Already have an account? <Link to="/login">Log In</Link>
         </p>

@@ -10,7 +10,8 @@ import Button from '@mui/material/Button';
 import axios from 'axios';
 import { DataGrid } from '@mui/x-data-grid';
 import Avatar from '@mui/material/Avatar';
-
+import Sidebar from '../components/Sidebar/Sidebar';
+import Navbar from '../NavNew/TopNav';
 const columns = [
   { field: 'id', headerName: 'Ticker', width: 90 },
   {
@@ -165,6 +166,7 @@ export default class Recommendation extends React.Component {
                 marketCap: comp.data.marketCapitalization,
                 excess_return: Math.floor(Number(fin.data.excess_return)),
                 esg: Math.floor(Number(element[1] * 1000))/10
+
               }
               recsCopy.push(single)
               this.setState({ full_recs : recsCopy})
@@ -179,6 +181,9 @@ export default class Recommendation extends React.Component {
   render(){
   return (
     <div>
+      <style>{'body {background-color: white; padding: 0px 0px 0px 323px }'}</style>
+      <Navbar/>
+      <Sidebar/>
       <Container maxWidth={false} sx={{ backgroundColor: '#EFE5FF'}}>
         <Box sx={{ fontWeight: 'bold', fontSize: 40, textAlignLast: 'center'}}>Recommendation</Box>
         <Box sx={{ fontWeight: 'bold', height: 10 }}></Box>
