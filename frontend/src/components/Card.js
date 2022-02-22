@@ -1,6 +1,7 @@
-import React from 'react'
-import './Card.css'
-import axios from 'axios'
+import React from 'react';
+import './Card.css';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -8,6 +9,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 const CardMine = (props) => {
+  const navigate = useNavigate()
   var alreadyHere = false
   try {
     alreadyHere = props.portfolio.includes(props.comp.Symbol)
@@ -35,10 +37,15 @@ const CardMine = (props) => {
           </Typography>
         </CardContent>
         <CardActions sx={{placeContent: 'center'}}>
-          <Button onClick={() => window.location.replace("financial/" + props.comp.Symbol)} variant="outlined" size="small">Learn More</Button>
+          <Button 
+            onClick={() => navigate(`/company/${props.comp.Symbol}`)} 
+            variant="outlined" 
+            size="small">
+              Learn More
+          </Button>
           <Button variant="outlined" size="small" onClick={(e)=> {
            if (!alreadyHere) {
-            axios.post('/account/add-portfolio/' + props.comp.Symbol, {}
+            axios.post(`/account/add-portfolio/${props.comp.Symbol}`, {}
             ).then(function (response) {
               window.location.reload()
             }).catch(function (error) {
@@ -46,7 +53,7 @@ const CardMine = (props) => {
               console.log(error);
             });
            } else {
-            axios.post('/account/remove-portfolio/' + props.comp.Symbol, {}
+            axios.post(`/account/remove-portfolio/${props.comp.Symbol}`, {}
             ).then(function (response) {
                 console.log("Successfully Updated")
                 window.location.reload()

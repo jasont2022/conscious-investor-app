@@ -1,7 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import s from 'styled-components'
 import Navbar from '../NavbarC';
+import Sidebar from '../components/Sidebar/Sidebar'
+
+const Wrapper = s.div`
+  width: 100%;
+  box-sizing: border-box;
+  margin: 20px auto 0px auto;
+  max-width: 1000px;
+`
 
 const Company = () => {
   const navigate = useNavigate()
@@ -53,6 +62,16 @@ const Company = () => {
     getCompanyInfo()
   }, [])
 
+  // add this company to user's portfolio
+  const addToPortfolio = async () => {
+    try {
+      const res = await axios.post(`/account/add-portfolio/${tick}`, {})
+      console.log(res)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   return (
     <>
       <Navbar
@@ -60,39 +79,44 @@ const Company = () => {
         count={count}
         setCount={setCount}
       />
-      <div>
+      <Sidebar />
+      <Wrapper>
         <h1>{basicInfo.companyName}</h1>
         <h3>{basicInfo.symbol}</h3>
         <h3>{basicInfo.price}</h3>
-        <h3>{basicInfo.mktCap}</h3>
-        <h3>{basicInfo.changes}</h3>
-        <h3>{basicInfo.industry}</h3>
+        <h3>Market Cap: {basicInfo.mktCap}</h3>
+        <h3>Changes: {basicInfo.changes}</h3>
+        <h3>Industry: {basicInfo.industry}</h3>
         <a href={basicInfo.website} target="_blank" rel="noreferrer">{basicInfo.website}</a>
-        <img src={basicInfo.img} alt="" />
+        <br />
+        <button onClick={() => addToPortfolio()}>
+          Add to Portfolio
+        </button>
+        <br/>
         <br/>
         <h2>About</h2>
         <p>{basicInfo.description}</p>
         <br />
         <h2>Scores</h2>
-        <h4>Total Score: {totalScore}</h4>
-        <h5>Community Score: {esgInfo.communityscore}</h5>
-        <h5>Controversies Score: {esgInfo.controversiesscore}</h5>
-        <h5>C Score: {esgInfo.cscore}</h5>
-        <h5>Csrstrategy Score: {esgInfo.csrstrategyscore}</h5>
-        <h5>Emissions Score: {esgInfo.emissionsscore}</h5>
-        <h5>Humanrights score: {esgInfo.humanrightsscore}</h5>
-        <h5>innovation score: {esgInfo.innovationscore}</h5>
-        <h5>management score: {esgInfo.managementscore}</h5>
-        <h5>productresp score: {esgInfo.productrespscore}</h5>
-        <h5>resource use score: {esgInfo.resourceusescore}</h5>
-        <h5>shareholders score: {esgInfo.shareholdersscore}</h5>
-        <h5>workforce score: {esgInfo.workforcescore}</h5>
+        <h4>Total Score: {Math.round(totalScore * 100)}</h4>
+        <h5>Community Score: {Math.round(esgInfo.communityscore * 100)}</h5>
+        <h5>Controversies Score: {Math.round(esgInfo.controversiesscore * 100)}</h5>
+        <h5>C Score: {Math.round(esgInfo.cscore * 100)}</h5>
+        <h5>Csrstrategy Score: {Math.round(esgInfo.csrstrategyscore * 100)}</h5>
+        <h5>Emissions Score: {Math.round(esgInfo.emissionsscore * 100)}</h5>
+        <h5>Humanrights score: {Math.round(esgInfo.humanrightsscore * 100)}</h5>
+        <h5>innovation score: {Math.round(esgInfo.innovationscore * 100)}</h5>
+        <h5>management score: {Math.round(esgInfo.managementscore * 100)}</h5>
+        <h5>productresp score: {Math.round(esgInfo.productrespscore * 100)}</h5>
+        <h5>resource use score: {Math.round(esgInfo.resourceusescore * 100)}</h5>
+        <h5>shareholders score: {Math.round(esgInfo.shareholdersscore * 100)}</h5>
+        <h5>workforce score: {Math.round(esgInfo.workforcescore * 100)}</h5>
         <br />
         <h2>News</h2>
         <div>
           {articles.map((article, i) => <News key={i} article={article} />)}
         </div>
-      </div>
+      </Wrapper>
     </>
   );
 }
@@ -105,7 +129,8 @@ const News = ({ article }) => {
       <h3>{author}</h3>
       <h3>{publishedAt}</h3>
       <h4>{description}</h4>
-      <img src={urlToImage} alt="" />
+      <img src={urlToImage} alt="" style={{width: '50%'}}/>
+      <br />
       <a href={url} target="_blank" rel="noreferrer">{url}</a>
     </div>
   );
