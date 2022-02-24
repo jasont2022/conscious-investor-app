@@ -46,18 +46,6 @@ const columns = [
   }
 ];
 
-
-    {
-      id: "#OD1712",
-      user: "frank iva",
-      date: "1 Jun 2021",
-      price: "$400",
-      status: "paid"
-    }
-
-  ]
-}
-
 const financial_columns = [
   { field: 'id', headerName: 'Ticker', width: 90 },
   {
