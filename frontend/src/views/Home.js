@@ -9,7 +9,7 @@ import 'boxicons/css/boxicons.min.css';
 
 // add more props to Navbar see Navbar.js
 const Home = () => {
-  const navigate = useNavigate;
+  const navigate = useNavigate();
   const [activeUser, setActiveUser] = useState('')
   const [count, setCount] = useState(0) // to trigger the useEffect
 
@@ -40,8 +40,8 @@ const Home = () => {
 
       <Sidebar />
       <Outlet />
-      
-      {activeUser ? (<h1>Hello {activeUser} </h1> ): (<h1>Not logged In</h1>)}
+
+      {activeUser ? (<h1>Hello {activeUser} </h1>) : (<h1>Not logged In</h1>)}
     </div>
   );
 };
