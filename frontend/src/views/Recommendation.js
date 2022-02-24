@@ -10,7 +10,8 @@ import Button from '@mui/material/Button';
 import axios from 'axios';
 import { DataGrid } from '@mui/x-data-grid';
 import Avatar from '@mui/material/Avatar';
-
+import Sidebar from '../components/Sidebar/Sidebar';
+import Navbar from '../NavNew/TopNav';
 const columns = [
   { field: 'id', headerName: 'Ticker', width: 90 },
   {
@@ -175,7 +176,7 @@ export default class Recommendation extends React.Component {
     }
     event.preventDefault();
   }
-
+  
   render() {
     return (
       <div>
@@ -233,7 +234,6 @@ export default class Recommendation extends React.Component {
             Apply
           </Button>
         </FormGroup>
-
         <div style={{ height: 600, width: '70%', margin: 'auto' }}>
           <DataGrid
             rows={this.state.full_recs.sort((a, b) => parseFloat(b.excess_return) - parseFloat(a.excess_return)).slice(0, this.state.rows)}
