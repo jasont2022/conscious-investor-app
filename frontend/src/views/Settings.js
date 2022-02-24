@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 //import Navbar from '../components/Navbar';
 
-import Navbar from '../NavbarC';
 import axios from 'axios'
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import Button from '@mui/material/Button';
+
+import Sidebar from '../components/Sidebar/Sidebar';
+import Navbar from '../NavbarC';
 
 const Title = {
   width: "300px",
@@ -89,6 +91,8 @@ export class SettingComp extends React.Component {
   render() {
     return (
     <div>
+      <style>{'body {background-color: white; padding: 0px 0px 0px 323px }'}</style>
+      <Sidebar/>
       <Navbar />
       <div style={{height:40}}></div>
       <h1 style={{textAlign:"center"}}>Settings</h1>
