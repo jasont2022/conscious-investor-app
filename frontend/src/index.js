@@ -15,6 +15,7 @@ import Recommendation from './views/Recommendation';
 //import AppLayout from './views/Layout/AppLayout.js';
 import Search from './views/Search';
 import {SettingComp as Settings} from './views/Settings';
+import Company from './views/Company';
 
 
 render(
@@ -27,6 +28,7 @@ render(
       <Route path='/settings' element={<Settings />} />
       <Route path='/search' element={<Search />} />
       <Route path='/recommendation' element={<Recommendation />} />
+      <Route path='/company/:tick' element={<Company />} />
       <Route path='*' element={<Error />} />
     </Routes>
   </Router>,

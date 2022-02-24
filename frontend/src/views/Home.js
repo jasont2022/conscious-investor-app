@@ -8,9 +8,6 @@ import 'boxicons/css/boxicons.min.css';
 import { DataGrid } from '@mui/x-data-grid';
 import Avatar from '@mui/material/Avatar';
 
-
-
-
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -19,11 +16,6 @@ import FormGroup from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
-
-
-
-
-
 
 const columns = [
   { field: 'id', headerName: 'Ticker', width: 90 },
@@ -108,7 +100,7 @@ const financial_columns = [
 
 // add more props to Navbar see Navbar.js
 const Home = () => {
-  const navigate = useNavigate;
+  const navigate = useNavigate();
   const [activeUser, setActiveUser] = useState('')
   const [count, setCount] = useState(0) // to trigger the useEffect
 
@@ -139,21 +131,7 @@ const Home = () => {
 
       <Sidebar />
       <Outlet />
-      
-      {activeUser ? (<h1>Hello {activeUser} </h1> ): (<h1>Not logged In</h1>)}
-
-
-
-     
-
-
-
-      
-
-
-
-    
-
+      {activeUser ? (<h1>Hello {activeUser} </h1>) : (<h1>Not logged In</h1>)}
     </div>
   );
 };
