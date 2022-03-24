@@ -8,7 +8,8 @@ import CardList from '../components/CardList'
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import '../components/Search.css'
-import { TailSpin } from  'react-loader-spinner'
+import { TailSpin } from  'react-loader-spinner';
+import { Outlet } from 'react-router-dom';
 
 // add more props to Navbar see Navbar.js
 export class Search extends React.Component {
@@ -43,19 +44,15 @@ export class Search extends React.Component {
     ))
     return (
     <div>
-      <style>{'body {background-color: white; padding: 0px 0px 0px 323px }'}</style>
-      <Sidebar/>
-      <Navbar/>
-      <Container maxWidth={false} sx={{ backgroundColor: '#EFE5FF'}}>
-        <Box sx={{ fontWeight: 'bold', fontSize: 40, textAlignLast: 'center'}}>Search</Box>
-        <Box sx={{ fontWeight: 'bold', height: 10 }}></Box>
-      </Container>
-
+      <Sidebar />
+      <Outlet/>
       <SearchBar placeholder="Enter Company Ticker" handleChange={(e)=>this.setState({searchField: e.target.value})}/>
       <div style={{paddingLeft:"45%"}}>
         {this.state.loading ? <TailSpin color="#00BFFF" height={80} width={80} /> : null }
       </div>
-      <CardList companies= {filteredCompanies.slice(0,20)} portfolio={this.state.portfolio}/>
+      <div style={{paddingLeft:"20%"}}>
+       <CardList companies= {filteredCompanies.slice(0,20)} portfolio={this.state.portfolio}/>
+      </div>
     </div> 
     )
   }

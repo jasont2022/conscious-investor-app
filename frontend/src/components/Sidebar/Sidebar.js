@@ -1,16 +1,25 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { Button } from '@mui/material';
 import './Sidebar.scss';
 
 const sidebarNavItems = [
     {
-        display: 'Home',
+        display: 'Personalize',
         icon: <i className='bx bx-home'></i>,
         to: '/',
         section: ''
     },
     {
         display: 'Dashboard',
+        icon: <i className='bx bx-star'></i>,
+        to: '/dashboard',
+        section: 'started'
+    },
+    {
+        display: 'About Us',
         icon: <i className='bx bx-star'></i>,
         to: '/aboutus',
         section: 'started'
@@ -22,40 +31,31 @@ const sidebarNavItems = [
         section: 'calendar'
     },
     {
-        display: 'User',
+        display: 'Search Companies',
         icon: <i className='bx bx-user'></i>,
-        to: '/user',
-        section: 'user'
-    },
-    {
-        display: 'Settings',
-        icon: <i className='bx bx-receipt'></i>,
-        to: '/settings',
-        section: 'order'
-    },
+        to: '/search',
+        section: 'search'
+    }
 ]
 
 const Sidebar = () => {
     const [activeIndex, setActiveIndex] = useState(0);
     const [stepHeight, setStepHeight] = useState(0);
     const sidebarRef = useRef();
-    //const indicatorRef = useRef();
-    const location = useLocation();
+    const indicatorRef = useRef();
 
-    useEffect(() => {
-        setTimeout(() => {
-            const sidebarItem = sidebarRef.current.querySelector('.sidebar__menu__item');
-            //indicatorRef.current.style.height = `${sidebarItem.clientHeight}px`;
-            setStepHeight(sidebarItem.clientHeight);
-        }, 50);
-    }, []);
+    const navigate = useNavigate();
 
-    // change active index
-    useEffect(() => {
-        const curPath = window.location.pathname.split('/')[1];
-        const activeItem = sidebarNavItems.findIndex(item => item.section === curPath);
-        setActiveIndex(curPath.length === 0 ? 0 : activeItem);
-    }, [location]);
+    const logout = async () => {
+        try {
+          const res = await axios.post('/account/logout')
+          console.log(res)
+          navigate('/Login')
+        } catch (err) {
+          console.log(err)
+        }
+      }
+
 
     return <div className='sidebar'>
         <div className="sidebar__logo">
@@ -72,10 +72,7 @@ const Sidebar = () => {
             {
                 sidebarNavItems.map((item, index) => (
                     <Link to={item.to} key={index}>
-                        <div className={`sidebar__menu__item ${activeIndex === index ? 'active' : ''}`}>
-                            <div className="sidebar__menu__item__icon">
-                                {item.icon}
-                            </div>
+                        <div className={`sidebar__menu__item`}>
                             <div className="sidebar__menu__item__text">
                                 {item.display}
                             </div>
@@ -83,6 +80,7 @@ const Sidebar = () => {
                     </Link>
                 ))
             }
+            <Button style={{marginLeft:"100px", marginTop:"200px"}} variant="outlined" onClick={logout}> Logout </Button>
         </div>
     </div>;
 };

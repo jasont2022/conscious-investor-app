@@ -11,7 +11,8 @@ import axios from 'axios';
 import { DataGrid } from '@mui/x-data-grid';
 import Avatar from '@mui/material/Avatar';
 import Sidebar from '../components/Sidebar/Sidebar';
-import Navbar from '../NavNew/TopNav';
+import { Outlet } from 'react-router-dom';
+
 const columns = [
   { field: 'id', headerName: 'Ticker', width: 90 },
   {
@@ -176,75 +177,80 @@ export default class Recommendation extends React.Component {
     }
     event.preventDefault();
   }
-  
-  render() {
-    return (
-      <div>
-        <Container maxWidth={false} sx={{ backgroundColor: '#EFE5FF' }}>
-          <Box sx={{ fontWeight: 'bold', fontSize: 40, textAlignLast: 'center' }}>Recommendation</Box>
-          <Box sx={{ fontWeight: 'bold', height: 10 }}></Box>
-        </Container>
-        <FormGroup className="MuiFormGroup-options" row sx={{ display: "block", textAlignLast: 'center' }}>
-          <FormControl variant="standard" sx={{ width: 150, margin: 5 }}>
-            <InputLabel>Industry</InputLabel>
-            <Select value={this.state.industry} onChange={this.handleChangeIndustry}>
-              <MenuItem value="Information Technology">Information Technology</MenuItem>
-              <MenuItem value="Financials">Financials</MenuItem>
-              <MenuItem value="Health Care">Health Care</MenuItem>
-              <MenuItem value="Utilities">Utilities</MenuItem>
-              <MenuItem value="Consumer Discretionary">Consumer Discretionary</MenuItem>
-              <MenuItem value="Materials">Materials</MenuItem>
-              <MenuItem value="Industrials">Industrials</MenuItem>
-              <MenuItem value="Real Estate">Real Estate</MenuItem>
-              <MenuItem value="Communication Services">Communication Services</MenuItem>
-              <MenuItem value="Consumer Staples">Consumer Staples</MenuItem>
-              <MenuItem value="Energy">Energy</MenuItem>
-              <MenuItem value="None">None</MenuItem>
-            </Select>
-          </FormControl>
-          <FormControl variant="standard" sx={{ width: 150, margin: 5 }}>
-            <InputLabel>Number of Companies</InputLabel>
-            <Select value={this.state.rows} onChange={this.handleChangeRows}>
-              <MenuItem value={5}>5</MenuItem>
-              <MenuItem value={10}>{Number(10).toLocaleString()}</MenuItem>
-              <MenuItem value={20}>{Number(20).toLocaleString()}</MenuItem>
-            </Select>
-          </FormControl>
-          <FormControl variant="standard" sx={{ width: 150, margin: 5 }}>
-            <InputLabel>Dividend</InputLabel>
-            <Select value={this.state.dividend} onChange={this.handleChangeDividend}>
-              <MenuItem value={true}>Greater Than 0</MenuItem>
-              <MenuItem value={false}>No Preference</MenuItem>
-            </Select>
-          </FormControl>
-          <FormControl variant="standard" sx={{ width: 150, margin: 5 }}>
-            <InputLabel>Model Type</InputLabel>
-            <Select value={this.state.model} onChange={this.handleChangeModel}>
-              <MenuItem value="esg">ESG</MenuItem>
-              <MenuItem value="financial">Financial</MenuItem>
-            </Select>
-          </FormControl>
-          <Button
-            size="small"
-            variant="outlined"
-            color="primary"
-            sx={{ width: 100, margin: 5 }}
-            onClick={this.handleApplyChanges}
-          >
-            Apply
-          </Button>
-        </FormGroup>
-        <div style={{ height: 600, width: '70%', margin: 'auto' }}>
-          <DataGrid
-            rows={this.state.full_recs.sort((a, b) => parseFloat(b.excess_return) - parseFloat(a.excess_return)).slice(0, this.state.rows)}
-            columns={this.state.model === 'esg' ? columns : financial_columns}
-            pageSize={10}
-            rowsPerPageOptions={[10]}
-            checkboxSelection
-            disableSelectionOnClick
-          />
-        </div>
-      </div>
-    );
+
+  render(){
+  return (
+    <div style={{paddingLeft:"100px"}}> 
+      <Sidebar />
+      <Outlet />
+      
+      <Container maxWidth={false} sx={{ backgroundColor: '#EFE5FF'}}>
+        <Box sx={{ fontWeight: 'bold', fontSize: 40, textAlignLast: 'center'}}>Recommendation</Box>
+        <Box sx={{ fontWeight: 'bold', height: 10 }}></Box>
+      </Container>
+      <FormGroup className="MuiFormGroup-options" row sx={{display:"block", textAlignLast:'center'}}>
+      <FormControl variant="standard" sx={{width:150, margin:5}}>
+      <InputLabel>Industry</InputLabel>
+      <Select value={this.state.industry} onChange={this.handleChangeIndustry}>
+        <MenuItem value="Information Technology">Information Technology</MenuItem>
+        <MenuItem value="Financials">Financials</MenuItem>
+        <MenuItem value="Health Care">Health Care</MenuItem>
+        <MenuItem value="Utilities">Utilities</MenuItem>
+        <MenuItem value="Consumer Discretionary">Consumer Discretionary</MenuItem>
+        <MenuItem value="Materials">Materials</MenuItem>
+        <MenuItem value="Industrials">Industrials</MenuItem>
+        <MenuItem value="Real Estate">Real Estate</MenuItem>
+        <MenuItem value="Communication Services">Communication Services</MenuItem>
+        <MenuItem value="Consumer Staples">Consumer Staples</MenuItem>
+        <MenuItem value="Energy">Energy</MenuItem>
+        <MenuItem value="None">None</MenuItem>
+      </Select>
+      </FormControl>
+      <FormControl variant="standard" sx={{width:150, margin:5}}>
+        <InputLabel>Number of Companies</InputLabel>
+        <Select value={this.state.rows} onChange={this.handleChangeRows}>
+          <MenuItem value={5}>5</MenuItem>
+          <MenuItem value={10}>{Number(10).toLocaleString()}</MenuItem>
+          <MenuItem value={20}>{Number(20).toLocaleString()}</MenuItem>
+        </Select>
+      </FormControl>
+      <FormControl variant="standard" sx={{width:150, margin:5}}>
+        <InputLabel>Dividend</InputLabel>
+        <Select value={this.state.dividend} onChange={this.handleChangeDividend}>
+          <MenuItem value={true}>Greater Than 0</MenuItem>
+          <MenuItem value={false}>No Preference</MenuItem>
+        </Select>
+      </FormControl>
+      <FormControl variant="standard" sx={{width:150, margin:5}}>
+        <InputLabel>Model Type</InputLabel>
+        <Select value={this.state.model} onChange={this.handleChangeModel}>
+          <MenuItem value="esg">ESG</MenuItem>
+          <MenuItem value="financial">Financial</MenuItem>
+        </Select>
+      </FormControl>
+      <Button
+        size="small"
+        variant="outlined"
+        color="primary"
+        sx={{width:100, margin:5}}
+        onClick={this.handleApplyChanges}
+      >
+        Apply
+      </Button>
+      </FormGroup>
+
+      <div style={{ height: 600, width: '70%', margin: 'auto'}}>
+      <DataGrid
+        rows={this.state.full_recs.sort((a, b) => parseFloat(b.excess_return) - parseFloat(a.excess_return)).slice(0, this.state.rows)}
+        columns={this.state.model === 'esg' ? columns : financial_columns}
+        pageSize={10}
+        rowsPerPageOptions={[10]}
+        checkboxSelection
+        disableSelectionOnClick
+      />
+    </div>
+
+    </div>
+  );
   }
 }

@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 const SearchBar = (props) => {
   return (
     <div className='searchBar'>
-      <Typography sx={{ fontSize: 20 }} color="text.secondary" gutterBottom>
+      <Typography sx={{ fontSize: 40 }} color="text.primary" gutterBottom>
         Search
       </Typography>
       <TextField
