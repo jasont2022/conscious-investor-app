@@ -6,6 +6,8 @@ import SearchBar from '../components/SearchBar'
 import CardList from '../components/CardList'
 import '../components/Search.css'
 import { TailSpin } from  'react-loader-spinner'
+import Sidebar from '../components/Sidebar/Sidebar';
+import { Outlet } from 'react-router-dom';
 
 // add more props to Navbar see Navbar.js
 export class Search extends React.Component {
@@ -40,12 +42,15 @@ export class Search extends React.Component {
     ))
     return (
     <div>
-      <Navbar />
+      <Sidebar />
+      <Outlet/>
       <SearchBar placeholder="Enter Company Ticker" handleChange={(e)=>this.setState({searchField: e.target.value})}/>
       <div style={{paddingLeft:"45%"}}>
         {this.state.loading ? <TailSpin color="#00BFFF" height={80} width={80} /> : null }
       </div>
-      <CardList companies= {filteredCompanies.slice(0,20)} portfolio={this.state.portfolio}/>
+      <div style={{paddingLeft:"20%"}}>
+       <CardList companies= {filteredCompanies.slice(0,20)} portfolio={this.state.portfolio}/>
+      </div>
     </div> 
     )
   }

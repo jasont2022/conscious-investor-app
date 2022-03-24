@@ -15,12 +15,15 @@ import Recommendation from './views/Recommendation';
 //import AppLayout from './views/Layout/AppLayout.js';
 import Search from './views/Search';
 import {SettingComp as Settings} from './views/Settings';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom'
 
 
 render(
   <Router>
     <Routes>
-      <Route path='/' element={<Home />} />
+      <Route path='/' element={<Settings />} />
+      <Route path='/dashboard' element={<Home />} />
       <Route path='/register' element={<Register />} />
       <Route path='/login' element={<Login />} />
       <Route path='/aboutus' element={<AboutUs />} />

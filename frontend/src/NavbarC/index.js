@@ -34,15 +34,6 @@ const Navbar = ({ user, count, setCount }) => {
 
         <Bars />
         <NavMenu>
-          <NavLink to='/about' activeStyle>
-            About
-          </NavLink>
-          <NavLink to='/services' activeStyle>
-            Services
-          </NavLink>
-          <NavLink to='/contact-us' activeStyle>
-            Contact Us
-          </NavLink>
           {user ? (
             <NavLink to={`/${user}`} activeStyle>
               {user}

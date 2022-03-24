@@ -6,6 +6,8 @@ import axios from 'axios'
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import Button from '@mui/material/Button';
+import Sidebar from '../components/Sidebar/Sidebar';
+import { Outlet } from 'react-router-dom';
 
 const Title = {
   width: "300px",
@@ -75,6 +77,8 @@ export class SettingComp extends React.Component {
   }
 
 
+
+
   componentDidMount() {
     axios.get("/account/categories")
     .then(res => {
@@ -88,10 +92,11 @@ export class SettingComp extends React.Component {
 
   render() {
     return (
-    <div>
-      <Navbar />
+    <div style={{paddingLeft:"150px"}}>
+      <Sidebar/>
+      <Outlet/>
       <div style={{height:40}}></div>
-      <h1 style={{textAlign:"center"}}>Settings</h1>
+      <h1 style={{textAlign:"center"}}>Personalize Your Scores</h1>
       <div style={{height:30}}></div>
       <div style={Row}>
         <div style={{textAlign: '-webkit-center',height:""}}>
@@ -99,7 +104,8 @@ export class SettingComp extends React.Component {
             <h2 style={{textAlign:"center"}}>How to use Preferences</h2>
             <p style={{textAlign:"center"}}>Adjust your commitment to certain ESG categories here. As you change the scale for a category, our
             algorithm continues to personalize your portfolio scores, as well as your recommendations, to match your beliefs. We scale each
-            preference from 1 being apathetic, and 5 for compassionate. After making adjustments, select "Submit Change". Thank you!</p>
+            preference from 1 being apathetic, and 5 for compassionate. After making adjustments, select "Submit Change". To go back to the default value,
+            set each category to 3, and your commitment will reflect how ESG scores are normally aggregated.</p>
             <form onSubmit={this.handleSubmit} style={{paddingLeft:"100px", paddingTop:"20px"}}>
             </form>
           </div>
@@ -117,17 +123,17 @@ export class SettingComp extends React.Component {
           </div>
         </div>
         <div style={Column2}>
-          <ul style={{overflowY:"auto", height: "26%"}}>
+          <ul style={{overflowY:"auto", height: "32%"}}>
             {
               this.state.category
                 .map((person, index) =>
                   <div style={{paddingTop:"15px"}}>
                     <li style={{listStyle: "none", display:"contents", fontSize:"35px"}}> {person["Title of Data Point"]}</li>
-                    <Popup trigger={<button style={dot}>i</button>} position="right center">
-                      <div>{person["Description"].slice(0,-32)}</div>
-                    </Popup>
+                      <Popup trigger={<button style={dot}>i</button>} position="left center">
+                        <div style={{height:"200px", overflowY:'scroll'}}>{person["Description"].slice(0,-32)}</div>
+                      </Popup>
                     <label style={{display:"block"}}>
-                    Set New Preference:
+                    Set New Preference:               
                     <input index={index} onChange={(e)=> {
                       const preferencesCopy = this.state.preferences.slice()
                       preferencesCopy[index] = Number(e.target.value)

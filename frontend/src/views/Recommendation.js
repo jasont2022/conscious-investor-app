@@ -10,6 +10,8 @@ import Button from '@mui/material/Button';
 import axios from 'axios';
 import { DataGrid } from '@mui/x-data-grid';
 import Avatar from '@mui/material/Avatar';
+import Sidebar from '../components/Sidebar/Sidebar';
+import { Outlet } from 'react-router-dom';
 
 const columns = [
   { field: 'id', headerName: 'Ticker', width: 90 },
@@ -178,7 +180,10 @@ export default class Recommendation extends React.Component {
 
   render(){
   return (
-    <div>
+    <div style={{paddingLeft:"100px"}}> 
+      <Sidebar />
+      <Outlet />
+      
       <Container maxWidth={false} sx={{ backgroundColor: '#EFE5FF'}}>
         <Box sx={{ fontWeight: 'bold', fontSize: 40, textAlignLast: 'center'}}>Recommendation</Box>
         <Box sx={{ fontWeight: 'bold', height: 10 }}></Box>
