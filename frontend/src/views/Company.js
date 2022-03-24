@@ -3,6 +3,19 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import s from 'styled-components'
 import Sidebar from '../components/Sidebar/Sidebar'
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Typography from '@mui/material/Typography';
+import { Button, CardActionArea, CardActions } from '@mui/material'
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+var htmlparser = require('htmlparser2');
 
 const Wrapper = s.div`
   width: 100%;
@@ -15,6 +28,7 @@ const Company = () => {
   const { tick } = useParams()
 
   // states to keep track of
+  const [portfolio, setPortfolio] = useState([]) // get user's portfolio
   const [basicInfo, setBasicInfo] = useState({}) // get company info
   const [esgInfo, setEsgInfo] = useState({}) // get esg info 
   const [totalScore, setTotalScore] = useState(0) // get total score
@@ -25,11 +39,14 @@ const Company = () => {
   useEffect(() => {
     const getCompanyInfo = async () => {
       try {
+        const { data: { portfolio } } = await axios.get('/account/user')
         const { data } = await axios.get(`https://financialmodelingprep.com/api/v3/profile/${tick}?apikey=e605026ed16aae3b084c6297f09bba6c`)
         const { data: esg } = await axios.get(`/account/esg/${tick}`)
         const { data: { score } } = await axios.get(`/account/ticker/${tick}`)
         const { data: { articles } } = await axios.get(`/account/company/news/${data[0].companyName}`)
         const { data: des } = await axios.get('/account/categories')
+        console.log(portfolio)
+        setPortfolio(portfolio)
         console.log(data[0])
         setBasicInfo(data[0])
         console.log(esg)
@@ -59,51 +76,69 @@ const Company = () => {
     getCompanyInfo()
   }, [])
 
-  // add this company to user's portfolio
-  const addToPortfolio = async () => {
-    try {
-      const res = await axios.post(`/account/add-portfolio/${tick}`, {})
-      console.log(res)
-    } catch (err) {
-      console.log(err)
+  // button logic
+  let alreadyHere = false
+  try {
+    alreadyHere = portfolio.includes(tick)
+  } catch (e) {
+    console.log(e)
+  }
+
+  // button portfolio logic add/remove a user portfolio
+  const portfolioLogic = async () => {
+    if (!alreadyHere) {
+      try {
+        const res = await axios.post(`/account/add-portfolio/${tick}`, {})
+        console.log(res)
+        console.log("Successfully Added")
+        window.location.reload()
+      } catch (err) {
+        alert("Could Not Update, Try Again")
+        console.log(err);
+      }
+    } else {
+      try {
+        const res = await axios.post(`/account/remove-portfolio/${tick}`, {})
+        console.log(res)
+        console.log("Successfully Removed")
+        window.location.reload()
+      } catch (err) {
+        alert("Could Not Update, Try Again")
+        console.log(err);
+      }
     }
   }
 
   return (
     <>
-    {
-      // Beta, 
-      // ceo, 
-      // changes, 
-      // city, 
-      // fulltimeemployees, 
-      // industry, 
-      // range (highest and lowest it’s been in the last 52 weeks),
-      // sector, 
-      // symbol, 
-      // volAvg, 
-      // website (link to name)
-    }
       <Sidebar />
       <Wrapper>
-        <h1>{basicInfo.companyName}</h1>
-        <h3>{basicInfo.symbol}</h3>
+        <h1>
+          <a href={basicInfo.website} target="_blank" rel="noreferrer">{basicInfo.companyName}</a>
+        </h1>
+        <h3>Symbol: {basicInfo.symbol}</h3>
         <img src={basicInfo.image} alt="company logo" />
         <h3>Price: {basicInfo.price}</h3>
-        <h3>Market Cap: {basicInfo.mktCap}</h3>
-        <h3>Changes: {basicInfo.changes}</h3>
         <h3>Industry: {basicInfo.industry}</h3>
-        <a href={basicInfo.website} target="_blank" rel="noreferrer">{basicInfo.website}</a>
-        <br />
-        <button onClick={() => addToPortfolio()}>
-          Add to Portfolio
-        </button>
-        <br />
+        <h3>Sector: {basicInfo.sector}</h3>
+        <Button variant="outlined" size="medium" onClick={() => portfolioLogic()}>
+          {alreadyHere ? "Remove" : "Add"}
+        </Button>
         <br />
         <h2>About</h2>
         <p>{basicInfo.description}</p>
+        <h4>CEO: {basicInfo.ceo}</h4>
+        <h4>Employees: {basicInfo.fullTimeEmployees}</h4>
+        <h4>Headquarters: {basicInfo.city}</h4>
         <br />
-        <h2>Scores</h2>
+        <h2>Financials</h2>
+        <h3>Market Cap: {basicInfo.mktCap}</h3>
+        <h3>Changes: {basicInfo.changes}</h3>
+        <h3>Beta: {basicInfo.beta}</h3>
+        <h3>Average Volume: {basicInfo.volAvg}</h3>
+        <h3>Range (Lowest, Highest) in Last 52 Weeks: {basicInfo.range}</h3>
+        <br />
+        <h2>ESG</h2>
         {console.log(categoricalDes)}
         <h4>Personalized Total Score: {Math.round(totalScore * 100)}</h4>
         <h5>Community Score: {Math.round(esgInfo.communityscore * 100) || "None"}</h5>
@@ -125,6 +160,33 @@ const Company = () => {
         <h5>Workforce/Employment Quality: {Math.round(esgInfo.so_wo_eq * 100)}</h5>
         <h5>Workforce/Health & Safety: {Math.round(esgInfo.so_wo_hs * 100)}</h5>
         <h5>Workforce/Training and Development: {Math.round(esgInfo.so_wo_td * 100)}</h5>
+
+{/* 
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell>ESG Score Name</TableCell>
+                <TableCell align="right">Number</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows.map((row) => (
+                <TableRow
+                  key={row.name}
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    {row.name}
+                  </TableCell>
+                  <TableCell align="right">{row.calories}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer> */}
+
+
         <br />
         <h2>News</h2>
         <div>
@@ -137,15 +199,50 @@ const Company = () => {
 
 const News = ({ article }) => {
   const { author, description, publishedAt, title, url, urlToImage } = article || {}
+  var result = [];
+
+  var parser = new htmlparser.Parser({
+    ontext: function (text) {
+      result.push(text);
+    }
+  }, { decodeEntities: true });
+
+  parser.write(description);
+  parser.end();
+
+  result.join('');
+
   return (
-    <div style={{ margin: '50px' }}>
-      <h1>{title}</h1>
-      <h3>{author}</h3>
-      <h3>{publishedAt.slice(0,10)}</h3>
-      <h4>{description}</h4>
-      <img src={urlToImage} alt="" style={{ width: '50%' }} />
-      <br />
-      <a href={url} target="_blank" rel="noreferrer">Learn More</a>
+    <div style={{ margin: '20px' }}>
+      <Card sx={{ maxWidth: "100%", marginTop: "40px" }}>
+        <CardActionArea>
+          <CardMedia
+            component="img"
+            height="140"
+            image={urlToImage}
+            alt="green iguana"
+          />
+          <CardContent>
+            <Typography gutterBottom variant="h4" component="div">
+              {title}
+            </Typography>
+            <Typography gutterBottom variant="h5" component="div">
+              {author}
+            </Typography>
+            <Typography gutterBottom variant="h8" component="div">
+              {publishedAt.slice(0, 10)}
+            </Typography>
+            <Typography variant="body1" color="text.secondary">
+              {result}
+            </Typography>
+          </CardContent>
+        </CardActionArea>
+        <CardActions>
+          <Button size="small" color="primary" href={url} target="_blank">
+            Go To Article
+          </Button>
+        </CardActions>
+      </Card>
     </div>
   );
 };
