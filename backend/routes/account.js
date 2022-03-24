@@ -362,7 +362,10 @@ router.get('/company/financials/:tick/:esg', (req, res) => {
 //News Feed API
 router.get('/company/news/:name', (req, res) => {
   var name = req.params.name
-  axios.get(`https://newsapi.org/v2/everything?q=${name}&from=2022-02-01&sortBy=popularity&apiKey=45bcdb0400ae42528a19416ef87bef5d`).then(result => {
+  var oneWeekAgo = new Date();
+  oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+  var total = `${oneWeekAgo.getFullYear()}-${(oneWeekAgo.getMonth() + 1) < 10 ? "0" + (oneWeekAgo.getMonth() + 1) : (oneWeekAgo.getMonth() + 1)}-${(oneWeekAgo.getDate() + 1) < 10 ? "0" + (oneWeekAgo.getDate() + 1) : (oneWeekAgo.getDate() + 1)}`
+  axios.get(`https://newsapi.org/v2/everything?q=${name}&from=${total}&sortBy=popularity&apiKey=45bcdb0400ae42528a19416ef87bef5d`).then(result => {
     res.send(result.data)
   })
 })
