@@ -178,7 +178,6 @@ export default class Dashboard extends React.Component {
         disableSelectionOnClick
       />
     </div>
-
     </div>
   );
   }

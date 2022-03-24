@@ -3,6 +3,12 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import s from 'styled-components'
 import Sidebar from '../components/Sidebar/Sidebar'
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Typography from '@mui/material/Typography';
+import { Button, CardActionArea, CardActions } from '@mui/material'
+var htmlparser = require('htmlparser2');
 
 const Wrapper = s.div`
   width: 100%;
@@ -137,15 +143,52 @@ const Company = () => {
 
 const News = ({ article }) => {
   const { author, description, publishedAt, title, url, urlToImage } = article || {}
+  const descriptionFixed = description.replaceAll("\\<.*?\\>", "")
+  var result = [];
+
+  var parser = new htmlparser.Parser({
+      ontext: function(text){
+          result.push(text);
+      }
+  }, {decodeEntities: true});
+
+  parser.write(description);
+  parser.end();
+
+  result.join('');
+
+
   return (
-    <div style={{ margin: '50px' }}>
-      <h1>{title}</h1>
-      <h3>{author}</h3>
-      <h3>{publishedAt.slice(0,10)}</h3>
-      <h4>{description}</h4>
-      <img src={urlToImage} alt="" style={{ width: '50%' }} />
-      <br />
-      <a href={url} target="_blank" rel="noreferrer">Learn More</a>
+    <div style={{ margin: '20px' }}>
+      <Card sx={{ maxWidth: "100%", marginTop: "40px" }}>
+      <CardActionArea>
+        <CardMedia
+          component="img"
+          height="140"
+          image={urlToImage}
+          alt="green iguana"
+        />
+        <CardContent>
+          <Typography gutterBottom variant="h4" component="div">
+            {title}
+          </Typography>
+          <Typography gutterBottom variant="h5" component="div">
+            {author}
+          </Typography>
+          <Typography gutterBottom variant="h8" component="div">
+            {publishedAt.slice(0,10)}
+          </Typography>
+          <Typography variant="body1" color="text.secondary">
+            {result}
+          </Typography>
+        </CardContent>
+      </CardActionArea>
+      <CardActions>
+        <Button size="small" color="primary" href={url} target="_blank">
+          Go To Article
+        </Button>
+      </CardActions>
+    </Card>
     </div>
   );
 };
