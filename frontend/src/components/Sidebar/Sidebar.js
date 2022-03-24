@@ -63,7 +63,7 @@ const Sidebar = () => {
         </div>
         <div ref={sidebarRef} className="sidebar__menu">
             <div
-                ref={indicatorRef}
+               // ref={indicatorRef}
                 className="sidebar__menu__indicator"
                 style={{
                     transform: `translateX(-50%) translateY(${activeIndex * stepHeight}px)`

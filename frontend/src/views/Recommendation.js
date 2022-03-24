@@ -97,10 +97,10 @@ export default class Recommendation extends React.Component {
     super(props);
     this.state = {
       industry: 'Information Technology',
-      state:'',
-      dividend:false,
-      model:'esg',
-      rows : 5,
+      state: '',
+      dividend: false,
+      model: 'esg',
+      rows: 5,
       full_recs: []
     }
 
@@ -112,28 +112,28 @@ export default class Recommendation extends React.Component {
   }
 
   handleChangeIndustry(event) {
-    this.setState({industry: event.target.value});
+    this.setState({ industry: event.target.value });
     event.preventDefault();
   }
 
   handleChangeRows(event) {
-    this.setState({rows: event.target.value});
+    this.setState({ rows: event.target.value });
     event.preventDefault();
   }
 
   handleChangeDividend(event) {
-    this.setState({dividend: event.target.value});
+    this.setState({ dividend: event.target.value });
     event.preventDefault();
   }
 
   handleChangeModel(event) {
-    this.setState({model: event.target.value});
+    this.setState({ model: event.target.value });
     event.preventDefault();
   }
 
   handleApplyChanges(event) {
-    this.setState({ full_recs : []})
-    if (this.state.model === 'esg'){
+    this.setState({ full_recs: [] })
+    if (this.state.model === 'esg') {
       axios.get(`/account/recommendations/top/${this.state.industry}/${this.state.dividend}/${this.state.rows}`).then(res => {
         var total = res.data
         total.forEach(element => {
@@ -145,10 +145,10 @@ export default class Recommendation extends React.Component {
               companyName: comp.data.name,
               industry: comp.data.finnhubIndustry,
               marketCap: comp.data.marketCapitalization,
-              esg: Math.floor(Number(element[1] * 1000))/10
+              esg: Math.floor(Number(element[1] * 1000)) / 10
             }
             recsCopy.push(single)
-            this.setState({ full_recs : recsCopy})
+            this.setState({ full_recs: recsCopy })
           })
         });
       })
@@ -166,10 +166,10 @@ export default class Recommendation extends React.Component {
                 industry: comp.data.finnhubIndustry,
                 marketCap: comp.data.marketCapitalization,
                 excess_return: Math.floor(Number(fin.data.excess_return)),
-                esg: Math.floor(Number(element[1] * 1000))/10
+                esg: Math.floor(Number(element[1] * 1000)) / 10
               }
               recsCopy.push(single)
-              this.setState({ full_recs : recsCopy})
+              this.setState({ full_recs: recsCopy })
             })
           })
         })

@@ -12,7 +12,8 @@ const Company = require('../models/company')
 const Esg = require('../models/esg')
 const Ticker = require('../models/ticker')
 const Comps = require('../models/comps')
-const checkAuthenticated = require('../middlewares/isAuthenticated')
+const checkAuthenticated = require('../middlewares/isAuthenticated');
+const { deserializeUser } = require('passport');
 
 /** Make a router */
 const router = express.Router()
@@ -107,6 +108,7 @@ router.post('/add-portfolio/:tick', (req, res) => {
   }
 })
 
+
 // remove stock from portfolio using ticker
 router.post('/remove-portfolio/:tick', (req, res) => {
   if (!req.user) {
@@ -133,9 +135,27 @@ router.post('/remove-portfolio/:tick', (req, res) => {
   }
 })
 
+// get portfolio information
+
+router.get('/portfolio', (req, res) => {
+
+  if (!req.user) {
+    res.send('user not logged in')
+  } else {
+    const { username, firstname, lastname, portfolio } = req.user
+  console.log("Portfolio Info")
+  console.log(portfolio)
+  res.send(portfolio);
+  }
+  });
+
+
+
+
 // get preference category names and desciptions
 router.get('/categories', (req, res) => {
   console.log("Category")
+  console.log("It is printt")
   Category.find({}).then(function (cat) {
     res.send(cat);
   });
@@ -180,11 +200,15 @@ router.get('/company', (req, res) => {
 })
 
 //get score for company given ticker
-router.get('/esg/:tick', (req, res) => {
-  const tick = req.params.tick
-  Company.findOne({tick : tick}).then(function (comp) {
-    res.send(comp);
-  });
+router.get('/esg/:tick', async (req, res) => {
+  const { params: { tick } } = req
+  try {
+    const { orgid } = await Company.findOne({ tick: tick})
+    const data = await Esg.findOne({ orgid: orgid })
+    res.send(data)
+  } catch (err) {
+    next(err)
+  }
 })
 
 //get score for company given ticker
@@ -224,7 +248,10 @@ router.get('/ticker/:tick', (req, res) => {
         + Number(compp["so_wo_hs"]) * Number(normalized[16])
         + Number(compp["so_wo_td"]) * Number(normalized[17])
         console.log(totalScore)
-        res.send('Personal score for ' + tick + " is " + totalScore);
+        res.json({
+          tick, 
+          score: totalScore
+        });
       })
     });
   }
@@ -335,7 +362,7 @@ router.get('/company/financials/:tick/:esg', (req, res) => {
 //News Feed API
 router.get('/company/news/:name', (req, res) => {
   var name = req.params.name
-  axios.get(`https://newsapi.org/v2/everything?q=${name}&from=2022-01-07&sortBy=popularity&apiKey=45bcdb0400ae42528a19416ef87bef5d`).then(result => {
+  axios.get(`https://newsapi.org/v2/everything?q=${name}&from=2022-02-01&sortBy=popularity&apiKey=45bcdb0400ae42528a19416ef87bef5d`).then(result => {
     res.send(result.data)
   })
 })

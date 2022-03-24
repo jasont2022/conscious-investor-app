@@ -1,12 +1,14 @@
 import React from 'react';
 //import Navbar from '../components/Navbar';
 import axios from 'axios'
-import Navbar from '../NavbarC';
+import Navbar from '../NavNew/TopNav';
+import Sidebar from '../components/Sidebar/Sidebar';
 import SearchBar from '../components/SearchBar'
 import CardList from '../components/CardList'
+import Container from '@mui/material/Container';
+import Box from '@mui/material/Box';
 import '../components/Search.css'
-import { TailSpin } from  'react-loader-spinner'
-import Sidebar from '../components/Sidebar/Sidebar';
+import { TailSpin } from  'react-loader-spinner';
 import { Outlet } from 'react-router-dom';
 
 // add more props to Navbar see Navbar.js

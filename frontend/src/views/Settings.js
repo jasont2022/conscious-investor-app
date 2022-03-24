@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 //import Navbar from '../components/Navbar';
 
-import Navbar from '../NavbarC';
 import axios from 'axios'
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import Button from '@mui/material/Button';
 import Sidebar from '../components/Sidebar/Sidebar';
 import { Outlet } from 'react-router-dom';
+import Navbar from '../NavbarC';
 
 const Title = {
   width: "300px",
