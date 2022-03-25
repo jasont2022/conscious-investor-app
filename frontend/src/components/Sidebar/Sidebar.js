@@ -48,13 +48,14 @@ const Sidebar = () => {
 
     const logout = async () => {
         try {
-          const res = await axios.post('/account/logout')
-          console.log(res)
-          navigate('/Login')
+            const res = await axios.post('/account/logout')
+            console.log(res)
+            navigate('/')
+            window.location.reload();
         } catch (err) {
-          console.log(err)
+            console.log(err)
         }
-      }
+    }
 
 
     return <div className='sidebar'>
@@ -63,7 +64,7 @@ const Sidebar = () => {
         </div>
         <div ref={sidebarRef} className="sidebar__menu">
             <div
-               // ref={indicatorRef}
+                // ref={indicatorRef}
                 className="sidebar__menu__indicator"
                 style={{
                     transform: `translateX(-50%) translateY(${activeIndex * stepHeight}px)`
@@ -80,7 +81,7 @@ const Sidebar = () => {
                     </Link>
                 ))
             }
-            <Button style={{marginLeft:"100px", marginTop:"200px"}} variant="outlined" onClick={logout}> Logout </Button>
+            <Button style={{ marginLeft: "100px", marginTop: "200px" }} variant="outlined" onClick={logout}> Logout </Button>
         </div>
     </div>;
 };

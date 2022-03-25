@@ -187,7 +187,7 @@ const Company = () => {
                       </ListItem>
                       <ListItem button divider>
                         <Typography variant="subtitle1" gutterBottom component="div">
-                          Changes: {basicInfo.changes}
+                          Changes: {basicInfo.changes > 0 ? `+${basicInfo.changes}` : `${basicInfo.changes}`}
                         </Typography>
                       </ListItem>
                       <ListItem button divider>
