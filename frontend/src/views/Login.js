@@ -35,7 +35,7 @@ const Login = () => {
 
   // function that handles login logic with backend
   const login = async e => {
-    e.preventDefault()
+    // e.preventDefault()
     try {
       const res = await axios.post('/account/login', { email, password })
       console.log(res)

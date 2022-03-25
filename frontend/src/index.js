@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { render } from 'react-dom';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.scss';
 import './views/theme.css';
@@ -15,26 +15,46 @@ import AboutUs from './views/AboutUs';
 import Recommendation from './views/Recommendation';
 //import AppLayout from './views/Layout/AppLayout.js';
 import Search from './views/Search';
-import {SettingComp as Settings} from './views/Settings';
+import { SettingComp as Settings } from './views/Settings';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
 import Company from './views/Company';
 
+const App = () => {
+  const [isAuthenticated, userHasAuthenticated] = useState(false);
+
+  useEffect(() => {
+    onLoad();
+  }, []);
+
+  const onLoad = async () => {
+    try {
+      const { data: { username } } = await axios.get('/account/user')
+      username ? userHasAuthenticated(true) : userHasAuthenticated(false)
+      console.log(isAuthenticated)
+    } catch (e) {
+      alert(e);
+    }
+  }
+
+  return (
+    <Router>
+      <Routes>
+        <Route path='/' element={isAuthenticated ? <Settings /> : <Login />} />
+        <Route path='/dashboard' element={isAuthenticated ? <DashHome /> : <Login />} />
+        <Route path='/register' element={!isAuthenticated ? <Register /> : <Settings />} />
+        <Route path='/login' element={!isAuthenticated ? <Login /> : <Settings />} />
+        <Route path='/aboutus' element={<AboutUs />} />
+        <Route path='/search' element={isAuthenticated ? <Search /> : <Login />} />
+        <Route path='/recommendation' element={isAuthenticated ? <Recommendation /> : <Login />} />
+        <Route path='/company/:tick' element={isAuthenticated ? <Company /> :  <Login />} />
+        <Route path='*' element={<Error />} />
+      </Routes>
+    </Router>
+  );
+}
 
 render(
-  <Router>
-    <Routes>
-      <Route path='/' element={<Settings />} />
-      <Route path='/dashboard' element={<DashHome />} />
-      <Route path='/register' element={<Register />} />
-      <Route path='/login' element={<Login />} />
-      <Route path='/aboutus' element={<AboutUs />} />
-      <Route path='/settings' element={<Settings />} />
-      <Route path='/search' element={<Search />} />
-      <Route path='/recommendation' element={<Recommendation />} />
-      <Route path='/company/:tick' element={<Company />} />
-      <Route path='*' element={<Error />} />
-    </Routes>
-  </Router>,
+  <App />,
   document.getElementById('root'),
 );
