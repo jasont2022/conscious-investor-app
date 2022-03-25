@@ -8,6 +8,7 @@ import Button from '@mui/material/Button';
 import Sidebar from '../components/Sidebar/Sidebar';
 import { Outlet } from 'react-router-dom';
 import Navbar from '../NavbarC';
+import { Container, Box } from '@mui/material';
 
 const Title = {
   width: "300px",
@@ -27,6 +28,7 @@ const Column1 = {
   alignSelf: "center",
   padding: "20px",
   margin: "10px",
+  marginLeft: "150px",
   display: 'content'
 }
 
@@ -92,11 +94,14 @@ export class SettingComp extends React.Component {
 
   render() {
     return (
-    <div style={{paddingLeft:"150px"}}>
+    <div style={{paddingLeft:"150px", maxHeight:"100%"}}>
       <Sidebar/>
       <Outlet/>
       <div style={{height:40}}></div>
-      <h1 style={{textAlign:"center"}}>Personalize Your Scores</h1>
+      <Container maxWidth={false} sx={{ backgroundColor: '#EFE5FF'}}>
+        <Box sx={{ fontWeight: 'bold', fontSize: 40, textAlignLast: 'center'}}>Personalize Your Score</Box>
+        <Box sx={{ fontWeight: 'bold', height: 10 }}></Box>
+      </Container>
       <div style={{height:30}}></div>
       <div style={Row}>
         <div style={{textAlign: '-webkit-center',height:""}}>
@@ -110,7 +115,7 @@ export class SettingComp extends React.Component {
             </form>
           </div>
           <div style={{paddingLeft:"10px", paddingTop:"30%"}}>
-          <Button variant="outlined" color="error" onClick = {(e) => { 
+          <Button variant="outlined" color="error" style={{marginLeft: "150px"}} onClick = {(e) => { 
               var result = window.confirm("Want to delete?");
               if (result) {
                 axios.delete("/account/remove-account").then(res => {

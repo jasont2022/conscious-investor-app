@@ -188,6 +188,7 @@ export default class Recommendation extends React.Component {
         <Box sx={{ fontWeight: 'bold', fontSize: 40, textAlignLast: 'center'}}>Recommendation</Box>
         <Box sx={{ fontWeight: 'bold', height: 10 }}></Box>
       </Container>
+      <div style={{paddingLeft:"10%"}}>
       <FormGroup className="MuiFormGroup-options" row sx={{display:"block", textAlignLast:'center'}}>
       <FormControl variant="standard" sx={{width:150, margin:5}}>
       <InputLabel>Industry</InputLabel>
@@ -248,6 +249,8 @@ export default class Recommendation extends React.Component {
         checkboxSelection
         disableSelectionOnClick
       />
+    </div>
+
     </div>
 
     </div>

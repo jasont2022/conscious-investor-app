@@ -46,11 +46,13 @@ export class Search extends React.Component {
     <div>
       <Sidebar />
       <Outlet/>
-      <SearchBar placeholder="Enter Company Ticker" handleChange={(e)=>this.setState({searchField: e.target.value})}/>
+      <div style={{paddingLeft:"15%"}}>
+        <SearchBar placeholder="Enter Company Ticker" handleChange={(e)=>this.setState({searchField: e.target.value})}/>
+      </div>
       <div style={{paddingLeft:"45%"}}>
         {this.state.loading ? <TailSpin color="#00BFFF" height={80} width={80} /> : null }
       </div>
-      <div style={{paddingLeft:"20%"}}>
+      <div style={{paddingLeft:"22%"}}>
        <CardList companies= {filteredCompanies.slice(0,20)} portfolio={this.state.portfolio}/>
       </div>
     </div> 
