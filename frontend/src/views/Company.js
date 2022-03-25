@@ -7,14 +7,16 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Tab from '@mui/material/Tab';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
+import MuiGrid from '@mui/material/Grid';
+import { styled } from '@mui/material/styles';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
 import { Button, CardActionArea, CardActions } from '@mui/material'
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
 var htmlparser = require('htmlparser2');
 
 const Wrapper = s.div`
@@ -34,6 +36,7 @@ const Company = () => {
   const [totalScore, setTotalScore] = useState(0) // get total score
   const [articles, setArticles] = useState([]) // get the news artcles
   const [categoricalDes, setCategoricalDes] = useState([]) // get the score cat des.
+  const [value, setValue] = React.useState('1') // change Tab UI value
 
   // make api calls to get info for the specific ticker
   useEffect(() => {
@@ -113,83 +116,209 @@ const Company = () => {
     <>
       <Sidebar />
       <Wrapper>
-        <h1>
-          <a href={basicInfo.website} target="_blank" rel="noreferrer">{basicInfo.companyName}</a>
-        </h1>
-        <h3>Symbol: {basicInfo.symbol}</h3>
-        <img src={basicInfo.image} alt="company logo" />
-        <h3>Price: {basicInfo.price}</h3>
-        <h3>Industry: {basicInfo.industry}</h3>
-        <h3>Sector: {basicInfo.sector}</h3>
-        <Button variant="outlined" size="medium" onClick={() => portfolioLogic()}>
+        <Typography variant="h3" gutterBottom component="div">
+          <a style={{ 'color': 'black' }} href={basicInfo.website} target="_blank" rel="noreferrer">{basicInfo.companyName}</a>
+        </Typography>
+        <Typography variant="h3" gutterBottom component="div">
+          Symbol: {basicInfo.symbol}
+        </Typography>
+        <a style={{ 'color': 'black' }} href={basicInfo.website} target="_blank" rel="noreferrer">
+          <img src={basicInfo.image} alt="company logo" />
+        </a>
+        <Typography variant="h5" gutterBottom component="div">
+          Price: {basicInfo.price}
+        </Typography>
+        <Typography variant="h5" gutterBottom component="div">
+          Industry: {basicInfo.industry}
+        </Typography>
+        <Typography variant="h5" gutterBottom component="div">
+          Sector: {basicInfo.sector}
+        </Typography>
+        <Button variant="outlined" size="large" color={alreadyHere ? "error" : "primary"} onClick={() => portfolioLogic()}>
           {alreadyHere ? "Remove" : "Add"}
         </Button>
         <br />
-        <h2>About</h2>
-        <p>{basicInfo.description}</p>
-        <h4>CEO: {basicInfo.ceo}</h4>
-        <h4>Employees: {basicInfo.fullTimeEmployees}</h4>
-        <h4>Headquarters: {basicInfo.city}</h4>
         <br />
-        <h2>Financials</h2>
-        <h3>Market Cap: {basicInfo.mktCap}</h3>
-        <h3>Changes: {basicInfo.changes}</h3>
-        <h3>Beta: {basicInfo.beta}</h3>
-        <h3>Average Volume: {basicInfo.volAvg}</h3>
-        <h3>Range (Lowest, Highest) in Last 52 Weeks: {basicInfo.range}</h3>
+        <Typography variant="h4" gutterBottom component="div">
+          Company Information
+        </Typography>
         <br />
-        <h2>ESG</h2>
-        {console.log(categoricalDes)}
-        <h4>Personalized Total Score: {Math.round(totalScore * 100)}</h4>
-        <h5>Community Score: {Math.round(esgInfo.communityscore * 100) || "None"}</h5>
-        <h5>Board of Directors/Board Functions: {Math.round(esgInfo.cg_bd_bf * 100)}</h5>
-        <h5>Board of Directors/Board Structure: {Math.round(esgInfo.cg_bd_bs * 100)}</h5>
-        <h5>Board of Directors/Compensation Policy: {Math.round(esgInfo.cg_bd_cp * 100)}</h5>
-        <h5>Integration/Vision and Strategy: {Math.round(esgInfo.cg_in_vs * 100)}</h5>
-        <h5>Shareholders/Shareholder Rights: {Math.round(esgInfo.cg_sh_sr * 100)}</h5>
-        <h5>Margins/Performance: {Math.round(esgInfo.ec_ma_pe * 100)}</h5>
-        <h5>Profitability/Shareholder Loyalty: {Math.round(esgInfo.ec_pr_sl * 100)}</h5>
-        <h5>Revenue/Client Loyalty: {Math.round(esgInfo.ec_re_cl * 100)}</h5>
-        <h5>Emission Reduction: {Math.round(esgInfo.en_en_er * 100)}</h5>
-        <h5>Product Innovation: {Math.round(esgInfo.en_en_pi * 100)}</h5>
-        <h5>Resource Reduction: {Math.round(esgInfo.en_en_rr * 100)}</h5>
-        <h5>Customer/Product Responsibility: {Math.round(esgInfo.so_cu_pr * 100)}</h5>
-        <h5>Society/Community: {Math.round(esgInfo.so_so_co * 100)}</h5>
-        <h5>Society/Human Rights: {Math.round(esgInfo.so_so_hr * 100)}</h5>
-        <h5>Workforce/Diversity and Opportunity: {Math.round(esgInfo.so_wo_do * 100)}</h5>
-        <h5>Workforce/Employment Quality: {Math.round(esgInfo.so_wo_eq * 100)}</h5>
-        <h5>Workforce/Health & Safety: {Math.round(esgInfo.so_wo_hs * 100)}</h5>
-        <h5>Workforce/Training and Development: {Math.round(esgInfo.so_wo_td * 100)}</h5>
-
-{/* 
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell>ESG Score Name</TableCell>
-                <TableCell align="right">Number</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows.map((row) => (
-                <TableRow
-                  key={row.name}
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                >
-                  <TableCell component="th" scope="row">
-                    {row.name}
-                  </TableCell>
-                  <TableCell align="right">{row.calories}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer> */}
-
-
+        <Card sx={{ maxWidth: "100%" }}>
+          <CardActionArea>
+            <CardContent>
+              <Box sx={{ width: '100%', typography: 'body1' }}>
+                <TabContext value={value}>
+                  <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                    <TabList onChange={(event, newValue) => setValue(newValue)} aria-label="lab API tabs example">
+                      <Tab label="About" value="1" />
+                      <Tab label="Financial" value="2" />
+                      <Tab label="ESG" value="3" />
+                    </TabList>
+                  </Box>
+                  <TabPanel value="1">
+                    <Typography variant="body1" gutterBottom>
+                      {basicInfo.description}
+                    </Typography>
+                    <br />
+                    <Grid container>
+                      <Grid item xs>
+                        <Typography variant="subtitle1" gutterBottom component="div">
+                          CEO: {basicInfo.ceo}
+                        </Typography>
+                      </Grid>
+                      <Grid item xs>
+                        <Typography variant="subtitle1" gutterBottom component="div">
+                          Employees: {basicInfo.fullTimeEmployees}
+                        </Typography>
+                      </Grid>
+                      <Grid item xs>
+                        <Typography variant="subtitle1" gutterBottom component="div">
+                          Headquarters: {basicInfo.city}
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                  </TabPanel>
+                  <TabPanel value="2">
+                    <List sx={style} component="nav">
+                      <ListItem button divider>
+                        <Typography variant="subtitle1" gutterBottom component="div">
+                          Market Cap: {basicInfo.mktCap}
+                        </Typography>
+                      </ListItem>
+                      <ListItem button divider>
+                        <Typography variant="subtitle1" gutterBottom component="div">
+                          Changes: {basicInfo.changes}
+                        </Typography>
+                      </ListItem>
+                      <ListItem button divider>
+                        <Typography variant="subtitle1" gutterBottom component="div">
+                          Beta: {basicInfo.beta}
+                        </Typography>
+                      </ListItem>
+                      <ListItem button divider>
+                        <Typography variant="subtitle1" gutterBottom component="div">
+                          Average Volume: {basicInfo.volAvg}
+                        </Typography>
+                      </ListItem>
+                      <ListItem button>
+                        <Typography variant="subtitle1" gutterBottom component="div">
+                          Range (Lowest, Highest) in Last 52 Weeks: {basicInfo.range}
+                        </Typography>
+                      </ListItem>
+                    </List>
+                  </TabPanel>
+                  <TabPanel value="3">
+                    <Typography variant="h6" gutterBottom component="div">
+                      Personalized Total Score: {Math.round(totalScore * 100)}
+                    </Typography>
+                    <Typography variant="h6" gutterBottom component="div">
+                      Community Score: {Math.round(esgInfo.communityscore * 100) || "None"}
+                    </Typography>
+                    <List sx={style} component="nav">
+                      <ListItem button divider>
+                        <Typography variant="subtitle1" gutterBottom component="div">
+                          Board of Directors/Board Functions: {Math.round(esgInfo.cg_bd_bf * 100)}
+                        </Typography>
+                      </ListItem>
+                      <ListItem button divider>
+                        <Typography variant="subtitle1" gutterBottom component="div">
+                          Board of Directors/Board Structure: {Math.round(esgInfo.cg_bd_bs * 100)}
+                        </Typography>
+                      </ListItem>
+                      <ListItem button divider>
+                        <Typography variant="subtitle1" gutterBottom component="div">
+                          Board of Directors/Compensation Policy: {Math.round(esgInfo.cg_bd_cp * 100)}
+                        </Typography>
+                      </ListItem>
+                      <ListItem button divider>
+                        <Typography variant="subtitle1" gutterBottom component="div">
+                          Integration/Vision and Strategy: {Math.round(esgInfo.cg_in_vs * 100)}
+                        </Typography>
+                      </ListItem>
+                      <ListItem button divider>
+                        <Typography variant="subtitle1" gutterBottom component="div">
+                          Shareholders/Shareholder Rights: {Math.round(esgInfo.cg_sh_sr * 100)}
+                        </Typography>
+                      </ListItem>
+                      <ListItem button divider>
+                        <Typography variant="subtitle1" gutterBottom component="div">
+                          Margins/Performance: {Math.round(esgInfo.ec_ma_pe * 100)}
+                        </Typography>
+                      </ListItem>
+                      <ListItem button divider>
+                        <Typography variant="subtitle1" gutterBottom component="div">
+                          Profitability/Shareholder Loyalty: {Math.round(esgInfo.ec_pr_sl * 100)}
+                        </Typography>
+                      </ListItem>
+                      <ListItem button divider>
+                        <Typography variant="subtitle1" gutterBottom component="div">
+                          Revenue/Client Loyalty: {Math.round(esgInfo.ec_re_cl * 100)}
+                        </Typography>
+                      </ListItem>
+                      <ListItem button divider>
+                        <Typography variant="subtitle1" gutterBottom component="div">
+                          Emission Reduction: {Math.round(esgInfo.en_en_er * 100)}
+                        </Typography>
+                      </ListItem>
+                      <ListItem button divider>
+                        <Typography variant="subtitle1" gutterBottom component="div">
+                          Product Innovation: {Math.round(esgInfo.en_en_pi * 100)}
+                        </Typography>
+                      </ListItem>
+                      <ListItem button divider>
+                        <Typography variant="subtitle1" gutterBottom component="div">
+                          Resource Reduction: {Math.round(esgInfo.en_en_rr * 100)}
+                        </Typography>
+                      </ListItem>
+                      <ListItem button divider>
+                        <Typography variant="subtitle1" gutterBottom component="div">
+                          Customer/Product Responsibility: {Math.round(esgInfo.so_cu_pr * 100)}
+                        </Typography>
+                      </ListItem>
+                      <ListItem button divider>
+                        <Typography variant="subtitle1" gutterBottom component="div">
+                          Society/Community: {Math.round(esgInfo.so_so_co * 100)}
+                        </Typography>
+                      </ListItem>
+                      <ListItem button divider>
+                        <Typography variant="subtitle1" gutterBottom component="div">
+                          Society/Human Rights: {Math.round(esgInfo.so_so_hr * 100)}
+                        </Typography>
+                      </ListItem>
+                      <ListItem button divider>
+                        <Typography variant="subtitle1" gutterBottom component="div">
+                          Workforce/Diversity and Opportunity: {Math.round(esgInfo.so_wo_do * 100)}
+                        </Typography>
+                      </ListItem>
+                      <ListItem button divider>
+                        <Typography variant="subtitle1" gutterBottom component="div">
+                          Workforce/Employment Quality: {Math.round(esgInfo.so_wo_eq * 100)}
+                        </Typography>
+                      </ListItem>
+                      <ListItem button divider>
+                        <Typography variant="subtitle1" gutterBottom component="div">
+                          Workforce/Health & Safety: {Math.round(esgInfo.so_wo_hs * 100)}
+                        </Typography>
+                      </ListItem>
+                      <ListItem button>
+                        <Typography variant="subtitle1" gutterBottom component="div">
+                          Workforce/Training and Development: {Math.round(esgInfo.so_wo_td * 100)}
+                        </Typography>
+                      </ListItem>
+                    </List>
+                    {console.log(categoricalDes)}
+                  </TabPanel>
+                </TabContext>
+              </Box>
+            </CardContent>
+          </CardActionArea>
+        </Card>
         <br />
-        <h2>News</h2>
-        <div>
+        <br />
+        <Typography variant="h4" gutterBottom component="div">
+          News
+        </Typography>
+        <div style={{ marginBottom: '50px' }}>
           {articles.map((article, i) => <News key={i} article={article} />)}
         </div>
       </Wrapper>
@@ -213,7 +342,7 @@ const News = ({ article }) => {
   result.join('');
 
   return (
-    <div style={{ margin: '20px' }}>
+    <div>
       <Card sx={{ maxWidth: "100%", marginTop: "40px" }}>
         <CardActionArea>
           <CardMedia
@@ -245,6 +374,20 @@ const News = ({ article }) => {
       </Card>
     </div>
   );
+};
+
+const Grid = styled(MuiGrid)(({ theme }) => ({
+  width: '100%',
+  ...theme.typography.body2,
+  '& [role="separator"]': {
+    margin: theme.spacing(0, 2),
+  },
+}));
+
+const style = {
+  width: '100%',
+  maxWidth: '100%',
+  bgcolor: 'background.paper',
 };
 
 export default Company;
