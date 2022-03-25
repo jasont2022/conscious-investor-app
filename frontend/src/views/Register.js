@@ -7,7 +7,7 @@ import axios from 'axios'
 const FormWrapper = s.div`
   width: 100%;
   box-sizing: border-box;
-  margin: 20px auto 0px auto;
+  margin: 60px auto 0px auto;
   max-width: 600px;
   padding-left: 15px;
   padding-right: 15px;
@@ -19,9 +19,10 @@ const SubmitButton = s.button`
   padding: 17px 32px;
   text-decoration: none;
   border-radius: 10px;
-  background: linear-gradient(-70deg,#ff7170,#ffe57f);
+  background: linear-gradient(-70deg,#880a8f,#f6aafa);
   color: white;
   opacity: ${props => (props.disable ? 0.5 : 1)};
+  
   :disabled:hover {
     cursor: not-allowed;
   }
@@ -52,7 +53,7 @@ const Register = () => {
   return (
     <FormWrapper>
       <h1 style={{ textAlign: 'center' }}>Register</h1>
-      <Form style={{ marginTop: '1.5em' }}>
+      <Form style={{ marginTop: '2.0em' }}>
         <Form.Group controlId="formBasicUsername">
           <Form.Label>Username <span style={{ color: 'red' }}>*</span></Form.Label>
           <Form.Control
@@ -60,6 +61,7 @@ const Register = () => {
             placeholder="Enter username"
             value={username}
             onChange={e => setUsername(e.target.value)}
+            style={{marginBottom:"20px"}}
           />
         </Form.Group>
         <Form.Group controlId="formBasicEmail">
@@ -69,6 +71,7 @@ const Register = () => {
             placeholder="Enter email"
             value={email}
             onChange={e => setEmail(e.target.value)}
+            style={{marginBottom:"20px"}}
           />
         </Form.Group>
         <Form.Group controlId="formBasicPassword">
@@ -78,6 +81,7 @@ const Register = () => {
             placeholder="Enter password"
             value={password}
             onChange={e => setPassword(e.target.value)}
+            style={{marginBottom:"20px"}}
           />
         </Form.Group>
         <Form.Group controlId="formBasicFirstName">
@@ -87,6 +91,7 @@ const Register = () => {
             placeholder="Enter first name"
             value={firstname}
             onChange={e => setFirstName(e.target.value)}
+            style={{marginBottom:"20px"}}
           />
         </Form.Group>
         <Form.Group controlId="formBasicLastName">
@@ -96,11 +101,12 @@ const Register = () => {
             placeholder="Enter last name"
             value={lastname}
             onChange={e => setLastName(e.target.value)}
+            style={{marginBottom:"20px"}}
           />
         </Form.Group>
         <p style={{ marginTop: '1rem' }}><span style={{ color: 'red' }}>*</span> Fields are required</p>
         <SubmitButton
-          style={{ margin: '1rem 0' }}
+          style={{ margin: '1rem 0', color:"white"}}
           onClick={e => signUp(e)}
           disabled={!username || !email || !password || !firstname || !lastname}
           disable={!username || !email || !password || !firstname || !lastname}
@@ -110,7 +116,10 @@ const Register = () => {
 
         
         <p style={{ textAlign: 'center' }}>
-          Already have an account? <Link to="/login">Log In</Link>
+          Already have an account? <Link to="/login" style={{color:"#880a8f"}}>Log In</Link>
+        </p>
+        <p style={{ textAlign: 'center' }}>
+          Learn More <Link to="/aboutus" style={{color:"#880a8f"}}> About Us</Link>
         </p>
       </Form>
     </FormWrapper>

@@ -44,7 +44,7 @@ const App = () => {
         <Route path='/dashboard' element={isAuthenticated ? <DashHome /> : <Navigate to="/login" replace />} />
         <Route path='/register' element={!isAuthenticated ? <Register /> : <Navigate to="/" replace />} />
         <Route path='/login' element={!isAuthenticated ? <Login /> : <Navigate to="/" replace />} />
-        <Route path='/aboutus' element={<AboutUs />} />
+        <Route path='/aboutus' element={<AboutUs isAuth={isAuthenticated}/>} />
         <Route path='/search' element={isAuthenticated ? <Search /> : <Navigate to="/login" replace />} />
         <Route path='/recommendation' element={isAuthenticated ? <Recommendation /> : <Navigate to="/login" replace />} />
         <Route path='/company/:tick' element={isAuthenticated ? <Company /> :  <Navigate to="/login" replace />} />

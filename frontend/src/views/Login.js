@@ -7,7 +7,7 @@ import axios from 'axios'
 const FormWrapper = s.div`
   width: 100%;
   box-sizing: border-box;
-  margin: 20px auto 0px auto;
+  margin: 200px auto 0px auto;
   max-width: 600px;
   padding-left: 15px;
   padding-right: 15px;
@@ -19,7 +19,7 @@ const SubmitButton = s.button`
   padding: 17px 32px;
   text-decoration: none;
   border-radius: 10px;
-  background: linear-gradient(-70deg,#ff7170,#ffe57f);
+  background: linear-gradient(-70deg,#880a8f,#f6aafa);
   color: white;
   opacity: ${props => (props.disable ? 0.5 : 1)};
   
@@ -57,6 +57,7 @@ const Login = () => {
             placeholder="Enter email"
             value={email}
             onChange={e => setEmail(e.target.value)}
+            style={{marginBottom:"40px"}}
           />
         </Form.Group>
         <Form.Group controlId="formBasicPassword">
@@ -66,10 +67,11 @@ const Login = () => {
             placeholder="Enter password"
             value={password}
             onChange={e => setPassword(e.target.value)}
+            style={{marginBottom:"40px"}}
           />
         </Form.Group>
         <SubmitButton
-          style={{ margin: '1rem 0' }}
+          style={{ margin: '1rem 0' , color:"white"}}
           onClick={e => login(e)}
           disabled={!email || !password}
           disable={!email || !password}
@@ -77,7 +79,10 @@ const Login = () => {
           Login
         </SubmitButton>
         <p style={{ textAlign: 'center' }}>
-          No account? <Link to="/register">Create one</Link>
+          No account? <Link to="/register" style={{color:"#880a8f"}}> Create one</Link>
+        </p>
+        <p style={{ textAlign: 'center' }}>
+          Learn More <Link to="/aboutus" style={{color:"#880a8f"}}> About Us</Link>
         </p>
       </Form>
     </FormWrapper>
