@@ -40,14 +40,14 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path='/' element={isAuthenticated ? <Settings /> : <Login />} />
-        <Route path='/dashboard' element={isAuthenticated ? <DashHome /> : <Login />} />
-        <Route path='/register' element={!isAuthenticated ? <Register /> : <Settings />} />
-        <Route path='/login' element={!isAuthenticated ? <Login /> : <Settings />} />
+        <Route path='/' element={isAuthenticated ? <Settings /> : <Navigate to="/login" replace />} />
+        <Route path='/dashboard' element={isAuthenticated ? <DashHome /> : <Navigate to="/login" replace />} />
+        <Route path='/register' element={!isAuthenticated ? <Register /> : <Navigate to="/" replace />} />
+        <Route path='/login' element={!isAuthenticated ? <Login /> : <Navigate to="/" replace />} />
         <Route path='/aboutus' element={<AboutUs />} />
-        <Route path='/search' element={isAuthenticated ? <Search /> : <Login />} />
-        <Route path='/recommendation' element={isAuthenticated ? <Recommendation /> : <Login />} />
-        <Route path='/company/:tick' element={isAuthenticated ? <Company /> :  <Login />} />
+        <Route path='/search' element={isAuthenticated ? <Search /> : <Navigate to="/login" replace />} />
+        <Route path='/recommendation' element={isAuthenticated ? <Recommendation /> : <Navigate to="/login" replace />} />
+        <Route path='/company/:tick' element={isAuthenticated ? <Company /> :  <Navigate to="/login" replace />} />
         <Route path='*' element={<Error />} />
       </Routes>
     </Router>
