@@ -26,7 +26,7 @@ var htmlparser = require('htmlparser2');
 
 
 const columns = [
-  { field: 'id', headerName: 'Number', width: 90 },
+  { field: 'id', headerName: 'Ticker', width: 90 },
   {
     field: 'logo',
     headerName: 'Logo',
@@ -219,25 +219,13 @@ const Dashboard = () => {
     <div>
       <style>{'body {background-color: white; padding: 20px 0px 0px 323px }'}</style>
       <Sidebar/>
-      <Container maxWidth={false} sx={{ backgroundColor: '#EFE5FF'}}>
+      <Container maxWidth={false} sx={{ backgroundColor: '#EFE5FF', marginBottom: 5}}>
         <Box sx={{ fontWeight: 'bold', fontSize: 40, textAlignLast: 'center'}}>Dashboard</Box>
         <Box sx={{ fontWeight: 'bold', height: 10 }}></Box>
       </Container>
 
-      <FormGroup className="MuiFormGroup-options" sx={{display:"block", textAlignLast:'center'}}>
-        <Button
-            size="small"
-            variant="outlined"
-            color="primary"
-            sx={{width:100, margin:5}}
-            onClick={handleApplyChanges}
-        >
-            Refresh
-        </Button>
-      </FormGroup>
 
-
-      <div style={{ height: 600, width: '70%', margin: 'auto'}}>
+      <div style={{ height: 300, width: '80%', margin: 'auto'}}>
         <DataGrid
             rows={fullRecs.sort((a, b) => parseFloat(b.excess_return) - parseFloat(a.excess_return)).slice(0, rows)}
             columns={model === 'esg' ? columns : financial_columns}

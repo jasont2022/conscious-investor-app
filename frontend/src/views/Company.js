@@ -115,28 +115,30 @@ const Company = () => {
   return (
     <>
       <Sidebar />
-      <Wrapper>
-        <Typography variant="h3" gutterBottom component="div">
-          <a style={{ 'color': 'black' }} href={basicInfo.website} target="_blank" rel="noreferrer">{basicInfo.companyName}</a>
-        </Typography>
-        <Typography variant="h3" gutterBottom component="div">
-          Symbol: {basicInfo.symbol}
-        </Typography>
-        <a style={{ 'color': 'black' }} href={basicInfo.website} target="_blank" rel="noreferrer">
-          <img src={basicInfo.image} alt="company logo" />
-        </a>
-        <Typography variant="h5" gutterBottom component="div">
-          Price: {basicInfo.price}
-        </Typography>
-        <Typography variant="h5" gutterBottom component="div">
-          Industry: {basicInfo.industry}
-        </Typography>
-        <Typography variant="h5" gutterBottom component="div">
-          Sector: {basicInfo.sector}
-        </Typography>
-        <Button variant="outlined" size="large" color={alreadyHere ? "error" : "primary"} onClick={() => portfolioLogic()}>
-          {alreadyHere ? "Remove" : "Add"}
-        </Button>
+      <Wrapper style={{marginLeft:"500px"}}>
+        <div style={{textAlign:'center'}}>
+          <Typography variant="h3" gutterBottom component="div">
+            <a style={{ 'color': 'black' }} href={basicInfo.website} target="_blank" rel="noreferrer">{basicInfo.companyName}</a>
+          </Typography>
+          <Typography variant="h3" gutterBottom component="div">
+            Symbol: {basicInfo.symbol}
+          </Typography>
+          <a style={{ 'color': 'black' }} href={basicInfo.website} target="_blank" rel="noreferrer">
+            <img src={basicInfo.image} alt="company logo" />
+          </a>
+          <Typography variant="h5" gutterBottom component="div">
+            Price: {basicInfo.price}
+          </Typography>
+          <Typography variant="h5" gutterBottom component="div">
+            Industry: {basicInfo.industry}
+          </Typography>
+          <Typography variant="h5" gutterBottom component="div">
+            Sector: {basicInfo.sector}
+          </Typography>
+          <Button variant="outlined" size="large" color={alreadyHere ? "error" : "primary"} onClick={() => portfolioLogic()}>
+            {alreadyHere ? "Remove" : "Add"}
+          </Button>
+        </div>
         <br />
         <br />
         <Typography variant="h4" gutterBottom component="div">
